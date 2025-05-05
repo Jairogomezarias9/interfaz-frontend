@@ -209,10 +209,12 @@ export default function Home() {
           {/* Teams and Score */}
           <div className="flex justify-between items-center mb-4 space-x-3">
             {/* Team 1 */}
-            <div className="flex items-center space-x-2 flex-1 justify-start min-w-0">
-               {/* Use dynamic logo source with fallback */}
-               <Image src={team1Logo} alt={`${team1Name} Logo`} width={28} height={28} onError={(e) => (e.currentTarget.src = defaultLogo)} />
-              <span className="text-lg font-semibold truncate">{team1Name}</span> {/* Use dynamic team name */}
+            {/* Removed flex-1 and min-w-0, added flex-shrink */}
+            <div className="flex items-center space-x-2 justify-start flex-shrink">
+               {/* Use dynamic logo source with fallback - Increased size */}
+               <Image src={team1Logo} alt={`${team1Name} Logo`} width={36} height={36} onError={(e) => (e.currentTarget.src = defaultLogo)} />
+              {/* Removed truncate, added whitespace-normal, changed text-lg to text-base */}
+              <span className="text-base font-semibold whitespace-normal">{team1Name}</span> {/* Use dynamic team name */}
             </div>
 
             {/* Separator */}
@@ -221,10 +223,12 @@ export default function Home() {
             </div>
 
             {/* Team 2 */}
-            <div className="flex items-center space-x-2 flex-1 justify-end min-w-0">
-               {/* Use dynamic logo source with fallback */}
-               <Image src={team2Logo} alt={`${team2Name} Logo`} width={28} height={28} onError={(e) => (e.currentTarget.src = defaultLogo)} />
-               <span className="text-lg font-semibold truncate">{team2Name}</span> {/* Use dynamic team name */}
+             {/* Removed flex-1 and min-w-0, added flex-shrink */}
+            <div className="flex items-center space-x-2 justify-end flex-shrink">
+               {/* Use dynamic logo source with fallback - Increased size */}
+               <Image src={team2Logo} alt={`${team2Name} Logo`} width={36} height={36} onError={(e) => (e.currentTarget.src = defaultLogo)} />
+               {/* Removed truncate, added whitespace-normal, changed text-lg to text-base */}
+               <span className="text-base font-semibold whitespace-normal">{team2Name}</span> {/* Use dynamic team name */}
             </div>
           </div>
 
