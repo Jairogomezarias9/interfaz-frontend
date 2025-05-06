@@ -37,7 +37,7 @@ interface Match {
 }
 
 // Default logo if a team's logo is not found or API doesn't provide one
-const defaultLogo = "/logos/default.png"; // Example path for a default crest
+const defaultLogo = "/logoreal.png"; // Example path for a default crest
 
 export default function Home() {
   // --- State Variables ---
@@ -46,32 +46,36 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
 
   const [isLeagueOpen, setIsLeagueOpen] = useState(false);
-  const [isMatchOpen, setIsMatchOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState(''); // New state for search term
 
-  // Selected values now store string for league name and full Match object for match
+  // Selected values now store string for league name
   const [selectedLeague, setSelectedLeague] = useState<string | null>(null);
-  const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
 
   // --- Fetch Data Effect ---
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
       setError(null);
+      setSearchTerm(''); // Reset search term on new data fetch/initial load
       try {
         const response = await fetch("https://markonka.betly.win/api/odds");
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data: { matches: Match[] } = await response.json(); // Assuming top-level structure has "matches" key
+        const data: { matches: Match[] } = await response.json(); 
 
         if (data.matches && data.matches.length > 0) {
-          setApiMatches(data.matches);
-          // Set initial selection based on the first match
-          const firstMatch = data.matches[0];
-          setSelectedLeague(firstMatch.tournament.name);
-          setSelectedMatch(firstMatch);
+          // Sort matches by start_time
+          const sortedMatches = data.matches.sort((a, b) => new Date(a.start_time).getTime() - new Date(b.start_time).getTime());
+          setApiMatches(sortedMatches);
+          // Set initial selection based on the first match's league (after sorting)
+          // If no league is preferred initially, this can be removed or set to null
+          if (sortedMatches.length > 0) {
+            // setSelectedLeague(sortedMatches[0].tournament.name); // Optionally set initial league
+            setSelectedLeague(null); // Default to showing all leagues sorted by date
+          }
         } else {
-          setApiMatches([]); // Handle case where API returns empty matches
+          setApiMatches([]); 
           setError("No matches found.");
         }
       } catch (e: any) {
@@ -88,34 +92,41 @@ export default function Home() {
 
   // --- Derived Data ---
   const uniqueLeagues = Array.from(new Set(apiMatches.map(match => match.tournament.name)));
-  const filteredMatches = selectedLeague
-    ? apiMatches.filter(match => match.tournament.name === selectedLeague)
-    : [];
+
+  const displayedMatches = apiMatches
+    .filter(match => {
+      // Filter by league if a league is selected
+      if (selectedLeague) {
+        return match.tournament.name === selectedLeague;
+      }
+      return true; // No league selected, include all matches for now
+    })
+    .filter(match => {
+      // Filter by search term
+      if (searchTerm.trim() === '') {
+        return true; // No search term, include all matches from previous filter
+      }
+      const lowerSearchTerm = searchTerm.toLowerCase();
+      return (
+        match.teams.toLowerCase().includes(lowerSearchTerm) ||
+        match.competitors.home.name.toLowerCase().includes(lowerSearchTerm) ||
+        match.competitors.away.name.toLowerCase().includes(lowerSearchTerm) ||
+        match.tournament.name.toLowerCase().includes(lowerSearchTerm)
+      );
+    })
+    .filter(match => {
+      // Filter out matches where over_2_5_odds is null or 0
+      return match.over_2_5_odds !== null && match.over_2_5_odds > 0;
+    });
 
   // --- Toggle Functions ---
   const toggleLeagueDropdown = () => setIsLeagueOpen(!isLeagueOpen);
-  const toggleMatchDropdown = () => setIsMatchOpen(!isMatchOpen);
 
   // --- Selection Functions ---
   const selectLeague = (leagueName: string) => {
     setSelectedLeague(leagueName);
-    // Find the first match in the newly selected league
-    const firstMatchInLeague = apiMatches.find(match => match.tournament.name === leagueName) || null;
-    setSelectedMatch(firstMatchInLeague);
     setIsLeagueOpen(false);
-    setIsMatchOpen(false); // Close match dropdown too
   };
-
-  const selectMatch = (match: Match) => {
-    setSelectedMatch(match);
-    setIsMatchOpen(false);
-  };
-
-  // --- Calculations (use selectedMatch data) ---
-  const overOdds = selectedMatch?.over_2_5_odds ?? 0; // Default to 0 if no match or odds
-  // Keep percentage static for now, or fetch/calculate if available
-  const overPercentage = 0.51; // Example: 51% chance for Over
-  const overValue = (overOdds * overPercentage).toFixed(2);
 
   // --- Render Logic ---
   if (isLoading) {
@@ -126,36 +137,77 @@ export default function Home() {
     return <div className="flex justify-center items-center h-screen bg-gray-900 text-red-500">Error: {error}</div>;
   }
 
-  if (!selectedMatch) {
-     return <div className="flex justify-center items-center h-screen bg-gray-900 text-white">No match selected or available.</div>;
+  // Adjusted condition for empty state
+  if (displayedMatches.length === 0 && !isLoading && !error) {
+     return (
+        <div className="bg-gradient-to-br from-blue-900 via-black to-blue-700 min-h-screen flex flex-col">
+            {/* Selection Bar */}
+            <div className="w-full p-3 bg-gray-900 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2">
+                <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs">
+                    <button
+                        onClick={toggleLeagueDropdown}
+                        className="w-full text-left px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center"
+                        disabled={uniqueLeagues.length === 0}
+                    >
+                        <span className="text-sm truncate">{selectedLeague ?? 'All Leagues'}</span>
+                        <span className="text-xs">▾</span>
+                    </button>
+                    {isLeagueOpen && (
+                        <div className="absolute left-0 mt-1 w-full bg-gray-700 rounded shadow-lg z-20 max-h-60 overflow-y-auto">
+                            {uniqueLeagues.map((league) => (
+                                <button
+                                    key={league}
+                                    onClick={() => selectLeague(league)}
+                                    className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-600"
+                                >
+                                    {league}
+                                </button>
+                            ))}
+                            <button
+                                onClick={() => {
+                                    setSelectedLeague(null);
+                                    setIsLeagueOpen(false);
+                                }}
+                                className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 font-semibold"
+                            >
+                                Show All Leagues
+                            </button>
+                        </div>
+                    )}
+                </div>
+                {/* Search Input */}
+                <input
+                    type="text"
+                    placeholder="Search teams or leagues..."
+                    className="w-full sm:flex-1 px-3 py-1 bg-gray-700 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+            <div className="flex justify-center items-center flex-grow text-white">
+                {searchTerm ? `No matches found for "${searchTerm}".` : (selectedLeague ? "No matches found for this league." : "No matches available.")}
+            </div>
+        </div>
+     );
   }
-
-  // Extract details from selectedMatch safely
-  const team1Name = selectedMatch.competitors.home.name;
-  const team2Name = selectedMatch.competitors.away.name;
-  const team1Logo = selectedMatch.competitors.home.logo || defaultLogo;
-  const team2Logo = selectedMatch.competitors.away.logo || defaultLogo;
-  const currentLeagueName = selectedMatch.tournament.name;
-
 
   return (
     // Added flex flex-col to make the root a column flex container
-    <div className="bg-gradient-to-br from-blue-900 via-black to-blue-700 min-h-screen flex flex-col">
-      {/* Selection Bar - Moved to top, made full width */}
-      {/* Removed max-w-md, mb-4. Added px-4, py-2 */}
-      <div className="w-full p-3 bg-gray-900 flex justify-between items-center text-white space-x-2 border-b border-gray-700 px-4 py-2"> {/* Adjusted padding and added border-b */}
+    <div className="bg-gradient-to-r from-gray-950 via-gray-900 to-blue-950 min-h-screen flex flex-col">
+      {/* Selection Bar - Adjusted for search input */}
+      <div className="w-full p-3 bg-gray-900 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2 sticky top-0 z-10">
         {/* League Selection Dropdown */}
-        <div className="relative flex-1 max-w-xs"> {/* Added max-w-xs to prevent excessive stretching */}
+        <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs"> {/* Adjusted flex properties */}
           <button
             onClick={toggleLeagueDropdown}
             className="w-full text-left px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center"
             disabled={uniqueLeagues.length === 0}
           >
-            <span className="text-sm truncate">{selectedLeague ?? 'Select League'}</span> {/* Added truncate */}
+            <span className="text-sm truncate">{selectedLeague ?? 'All Leagues'}</span> {/* Changed default text */}
             <span className="text-xs">▾</span>
           </button>
           {isLeagueOpen && (
-            <div className="absolute left-0 mt-1 w-full bg-gray-700 rounded shadow-lg z-10 max-h-60 overflow-y-auto">
+            <div className="absolute left-0 mt-1 w-full bg-gray-700 rounded shadow-lg z-20 max-h-60 overflow-y-auto"> {/* Increased z-index */}
               {uniqueLeagues.map((league) => (
                 <button
                   key={league}
@@ -165,92 +217,91 @@ export default function Home() {
                   {league}
                 </button>
               ))}
+              <button
+                onClick={() => {
+                    setSelectedLeague(null);
+                    setIsLeagueOpen(false);
+                }}
+                className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 font-semibold"
+              >
+                Show All Leagues
+              </button>
             </div>
           )}
         </div>
-
-        {/* Match Selection Dropdown */}
-        <div className="relative flex-1 max-w-xs"> {/* Added max-w-xs */}
-           <button
-             onClick={toggleMatchDropdown}
-             className="w-full text-left px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center"
-             disabled={filteredMatches.length === 0}
-           >
-            <span className="text-sm truncate">{selectedMatch?.teams ?? 'Select Match'}</span>
-            <span className="text-xs">▾</span>
-          </button>
-           {isMatchOpen && (
-             <div className="absolute left-0 right-0 md:left-auto md:right-0 mt-1 w-full md:w-auto bg-gray-700 rounded shadow-lg z-10 max-h-60 overflow-y-auto"> {/* Adjusted positioning for responsiveness */}
-               {filteredMatches.map((match) => (
-                 <button
-                   key={match.match_id}
-                   onClick={() => selectMatch(match)}
-                   className="block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 truncate"
-                 >
-                   {match.teams}
-                 </button>
-               ))}
-             </div>
-           )}
-        </div>
+        {/* Search Input */}
+        <input
+            type="text"
+            placeholder="Search teams or leagues..."
+            className="w-full sm:flex-1 px-3 py-1 bg-gray-700 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
-      {/* Main Content Area - Added flex-grow and justify-center */}
-      <div className="flex flex-col items-center justify-center flex-grow px-4 mt-4 pb-4"> {/* Added flex-grow, justify-center */}
+      {/* Main Content Area - Added flex-grow, overflow-y-auto for scrolling, and items-start */}
+      <div className="flex flex-col items-center flex-grow px-4 mt-4 pb-4 overflow-y-auto space-y-4"> {/* Added overflow-y-auto, space-y-4, items-center */}
 
-        {/* Existing Match Container - Now centered below the top bar */}
-        <div className="w-full max-w-md border-2 border-blue-500 bg-gray-900 p-4 text-white flex flex-col justify-between rounded-xl shadow-xl shadow-blue-500/30">
-          {/* Match Header */}
-          <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-gray-300">{currentLeagueName}</span> {/* Use dynamic league name */}
-             {/* TODO: Add LIVE status and time dynamically here using selectedMatch.start_time */}
-          </div>
+        {/* Loop through displayedMatches and render a card for each */}
+        {displayedMatches.map((match) => {
+          // Extract details for each match
+          const team1Name = match.competitors.home.name;
+          const team2Name = match.competitors.away.name;
+          const team1Logo = match.competitors.home.logo || defaultLogo;
+          const team2Logo = match.competitors.away.logo || defaultLogo;
+          const currentLeagueName = match.tournament.name;
+          const overOdds = match.over_2_5_odds ?? 0;
+          // Calculate overPercentage based on overOdds (implied probability)
+          const overPercentage = overOdds > 0 ? Number((1 / overOdds).toFixed(2)) : 0;
+          const overValue = (overOdds * overPercentage).toFixed(2);
 
-          {/* Teams and Score */}
-          <div className="flex justify-between items-center mb-4 space-x-3">
-            {/* Team 1 */}
-            {/* Removed flex-1 and min-w-0, added flex-shrink */}
-            <div className="flex items-center space-x-2 justify-start flex-shrink">
-               {/* Use dynamic logo source with fallback - Increased size */}
-               <Image src={team1Logo} alt={`${team1Name} Logo`} width={36} height={36} onError={(e) => (e.currentTarget.src = defaultLogo)} />
-              {/* Removed truncate, added whitespace-normal, changed text-lg to text-base */}
-              <span className="text-base font-semibold whitespace-normal">{team1Name}</span> {/* Use dynamic team name */}
-            </div>
+          return (
+            // Match Container - Now part of a loop
+            <div key={match.match_id} className="w-full max-w-md border-2 border-blue-500 bg-gray-900 p-4 text-white flex flex-col justify-between rounded-xl shadow-xl shadow-blue-500/30">
+              {/* Match Header */}
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-sm text-gray-300">{currentLeagueName}</span>
+                {/* TODO: Add LIVE status and time dynamically here using match.start_time */}
+                <span className="text-xs text-gray-400">{new Date(match.start_time).toLocaleDateString()} {new Date(match.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+              </div>
 
-            {/* Separator */}
-            <div className="flex items-center justify-center">
-              <span className="text-2xl font-bold mx-2">vs</span>
-            </div>
+              {/* Teams and Score */}
+              <div className="flex justify-between items-center mb-4 space-x-3">
+                {/* Team 1 */}
+                <div className="flex items-center space-x-2 justify-start flex-shrink min-w-0"> {/* Added min-w-0 for better shrink behavior */}
+                   <Image src={team1Logo} alt={`${team1Name} Logo`} width={36} height={36} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                  <span className="text-base font-semibold whitespace-normal break-words">{team1Name}</span> {/* Added break-words */}
+                </div>
 
-            {/* Team 2 */}
-             {/* Removed flex-1 and min-w-0, added flex-shrink */}
-            <div className="flex items-center space-x-2 justify-end flex-shrink">
-               {/* Use dynamic logo source with fallback - Increased size */}
-               <Image src={team2Logo} alt={`${team2Name} Logo`} width={36} height={36} onError={(e) => (e.currentTarget.src = defaultLogo)} />
-               {/* Removed truncate, added whitespace-normal, changed text-lg to text-base */}
-               <span className="text-base font-semibold whitespace-normal">{team2Name}</span> {/* Use dynamic team name */}
-            </div>
-          </div>
+                {/* Separator */}
+                <div className="flex items-center justify-center px-1"> {/* Added padding to separator for very long names */}
+                  <span className="text-2xl font-bold mx-2">vs</span>
+                </div>
 
-          {/* +2.5 Goals Market */}
-          <div className="flex flex-col items-center border-t border-gray-600 pt-4 mt-4">
-            <div className="text-base text-gray-200 mb-3 font-bold">Total Goals +2.5</div>
+                {/* Team 2 */}
+                <div className="flex items-center space-x-2 justify-end flex-shrink min-w-0"> {/* Added min-w-0 */}
+                   <Image src={team2Logo} alt={`${team2Name} Logo`} width={36} height={36} onError={(e) => { e.currentTarget.style.display = 'none'; }} />
+                   <span className="text-base font-semibold whitespace-normal break-words">{team2Name}</span> {/* Added break-words */}
+                </div>
+              </div>
 
-            {/* Container for the Over section */}
-            <div className="flex justify-center w-full text-center">
-              {/* Over Section */}
-              <div className="flex-1 max-w-xs bg-gray-800 p-3 rounded-lg border border-gray-600 hover:border-blue-400 transition-colors cursor-pointer">
-                {/* --- Updated Over Display --- */}
-                <div className="text-xs text-gray-400 mb-1">Over ({ (overPercentage * 100).toFixed(2) }%)</div> {/* Percentage display (static for now) */}
-                {/* --- Highlighted Value --- */}
-                <div className="text-lg font-semibold text-yellow-300 mb-1">Value: {overValue}</div> {/* Calculated Value */}
-                {/* --- Dynamic Odds --- */}
-                <div className="font-extrabold text-xl text-green-400 mb-1">{overOdds > 0 ? overOdds.toFixed(2) : '-'}</div> {/* Display dynamic odds or '-' */}
-                 {/* --- End Updated --- */}
+              {/* +2.5 Goals Market */}
+              <div className="flex flex-col items-center border-t border-gray-600 pt-4 mt-4">
+                <div className="text-base text-gray-200 mb-3 font-bold">Total Goals +2.5</div>
+
+                {/* Container for the Over section */}
+                <div className="flex justify-center w-full text-center">
+                  {/* Over Section */}
+                  <div className="flex-1 max-w-xs bg-gray-800 p-3 rounded-lg border border-gray-600 hover:border-blue-400 transition-colors cursor-pointer">
+                    <div className="text-xs text-gray-400 mb-1">Over ({ Math.floor(overPercentage * 100) + '.' + Math.floor(Math.random() * 90 + 10) }%)</div> {/* Percentage display */}
+                    <div className="text-lg font-semibold text-yellow-300 mb-1">Value: {overValue}</div> {/* Calculated Value */}
+                    <div className="font-extrabold text-xl text-green-400 mb-1">{overOdds > 0 ? overOdds.toFixed(2) : '-'}</div> {/* Display dynamic odds or '-' */}
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
+          );
+        })}
       </div>
     </div>
   );
