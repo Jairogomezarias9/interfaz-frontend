@@ -273,7 +273,7 @@ export default function Home() {
                   <span className="text-base font-semibold whitespace-normal break-words">{team1Name}</span> {/* Added break-words */}
                 </div>
 
-                {/* Separator */}
+                {/* rator */}
                 <div className="flex items-center justify-center px-1"> {/* Added padding to separator for very long names */}
                   <span className="text-2xl font-bold mx-2">vs</span>
                 </div>
