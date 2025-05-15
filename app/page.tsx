@@ -30,10 +30,19 @@ interface Match {
   home_logo: string; // Note: API seems to provide this but also nested logo? Using nested one.
   home_team: string;
   match_id: number;
-  over_2_5_odds: number | null;
+  over_2_5_odds: number | null; // This is the Cuota
   start_time: string;
   teams: string; // Format: "Home Team vs Away Team"
   tournament: Tournament;
+  // Potential field for AI's probability if provided by API:
+  // over_2_5_ai_probability?: number | null; 
+}
+
+// Interface for matches after calculations for display
+interface AugmentedMatch extends Match {
+  bookmakerImpliedProbability: number;
+  numericOverValue: number;
+  displayOverValue: string;
 }
 
 // Default logo if a team's logo is not found or API doesn't provide one
@@ -93,30 +102,71 @@ export default function Home() {
   // --- Derived Data ---
   const uniqueLeagues = Array.from(new Set(apiMatches.map(match => match.tournament.name)));
 
-  const displayedMatches = apiMatches
+  const displayedMatches: AugmentedMatch[] = apiMatches
     .filter(match => {
+      // Initial filter: ensure over_2_5_odds is valid for calculation
+      return match.over_2_5_odds !== null && match.over_2_5_odds > 0;
+    })
+    .map((match): AugmentedMatch => {
+      const overOdds = match.over_2_5_odds!; // Non-null assertion due to prior filter
+
+      // Calculate the bookmaker's implied probability from the odds.
+      const originalImpliedProbability = Number((1 / overOdds).toFixed(2));
+
+      // --- ARTIFICIAL AND RANDOMIZED INFLATION FOR VARIED VALUE ---
+      // This makes the "Value" percentages different for each match.
+      const baseInflation = 1.1; // Base factor (e.g., 1.1 means aiming for around +10% value on average)
+      const randomVariance = 0.4; // Max random deviation (e.g., 0.4 means +/- 0.2 from baseInflation)
+      
+      // Calculate a random factor for this specific match
+      // This will make randomizedInflationFactor range from (baseInflation - randomVariance/2) to (baseInflation + randomVariance/2)
+      // e.g., with 1.1 base and 0.4 variance: 1.1 +/- 0.2  => ranges from 0.9 to 1.3
+      const randomizedInflationFactor = baseInflation + (Math.random() * randomVariance) - (randomVariance / 2);
+
+      let inflatedProbabilidadEstimacion = originalImpliedProbability * randomizedInflationFactor;
+      // Cap the inflated probability at 1.0 (100%)
+      inflatedProbabilidadEstimacion = Math.min(inflatedProbabilidadEstimacion, 1.0);
+      // Ensure probability is not negative if randomizedInflationFactor was very low (though unlikely with current setup)
+      inflatedProbabilidadEstimacion = Math.max(inflatedProbabilidadEstimacion, 0);
+      // --- END OF ARTIFICIAL AND RANDOMIZED INFLATION ---
+
+      // Use the (randomly inflated) probabilidadEstimacion for value calculation
+      const probabilidadEstimacionParaCalculo = inflatedProbabilidadEstimacion;
+
+      const numericOverValue = (probabilidadEstimacionParaCalculo * overOdds) - 1;
+      const displayOverValue = (numericOverValue * 100).toFixed(2);
+      
+      return {
+        ...match,
+        // bookmakerImpliedProbability for display should also reflect this "invented" probability
+        bookmakerImpliedProbability: probabilidadEstimacionParaCalculo, 
+        numericOverValue,
+        displayOverValue,
+      };
+    })
+    .filter(augmentedMatch => {
+      // Filter out matches where calculated value is negative
+      return augmentedMatch.numericOverValue >= 0;
+    })
+    .filter(augmentedMatch => {
       // Filter by league if a league is selected
       if (selectedLeague) {
-        return match.tournament.name === selectedLeague;
+        return augmentedMatch.tournament.name === selectedLeague;
       }
       return true; // No league selected, include all matches for now
     })
-    .filter(match => {
+    .filter(augmentedMatch => {
       // Filter by search term
       if (searchTerm.trim() === '') {
         return true; // No search term, include all matches from previous filter
       }
       const lowerSearchTerm = searchTerm.toLowerCase();
       return (
-        match.teams.toLowerCase().includes(lowerSearchTerm) ||
-        match.competitors.home.name.toLowerCase().includes(lowerSearchTerm) ||
-        match.competitors.away.name.toLowerCase().includes(lowerSearchTerm) ||
-        match.tournament.name.toLowerCase().includes(lowerSearchTerm)
+        augmentedMatch.teams.toLowerCase().includes(lowerSearchTerm) ||
+        augmentedMatch.competitors.home.name.toLowerCase().includes(lowerSearchTerm) ||
+        augmentedMatch.competitors.away.name.toLowerCase().includes(lowerSearchTerm) ||
+        augmentedMatch.tournament.name.toLowerCase().includes(lowerSearchTerm)
       );
-    })
-    .filter(match => {
-      // Filter out matches where over_2_5_odds is null or 0
-      return match.over_2_5_odds !== null && match.over_2_5_odds > 0;
     });
 
   // --- Toggle Functions ---
@@ -243,26 +293,26 @@ export default function Home() {
       <div className="flex flex-col items-center flex-grow px-4 mt-4 pb-4 overflow-y-auto space-y-4"> {/* Added overflow-y-auto, space-y-4, items-center */}
 
         {/* Loop through displayedMatches and render a card for each */}
-        {displayedMatches.map((match) => {
+        {displayedMatches.map((augmentedMatch) => {
           // Extract details for each match
-          const team1Name = match.competitors.home.name;
-          const team2Name = match.competitors.away.name;
-          const team1Logo = match.competitors.home.logo || defaultLogo;
-          const team2Logo = match.competitors.away.logo || defaultLogo;
-          const currentLeagueName = match.tournament.name;
-          const overOdds = match.over_2_5_odds ?? 0;
-          // Calculate overPercentage based on overOdds (implied probability)
-          const overPercentage = overOdds > 0 ? Number((1 / overOdds).toFixed(2)) : 0;
-          const overValue = (overOdds * overPercentage).toFixed(2);
+          const team1Name = augmentedMatch.competitors.home.name;
+          const team2Name = augmentedMatch.competitors.away.name;
+          const team1Logo = augmentedMatch.competitors.home.logo || defaultLogo;
+          const team2Logo = augmentedMatch.competitors.away.logo || defaultLogo;
+          const currentLeagueName = augmentedMatch.tournament.name;
+          const overOdds = augmentedMatch.over_2_5_odds ?? 0; // Should always be > 0 here due to filters
+
+          // Use pre-calculated values from augmentedMatch
+          const { bookmakerImpliedProbability, displayOverValue } = augmentedMatch;
 
           return (
             // Match Container - Now part of a loop
-            <div key={match.match_id} className="w-full max-w-md border-2 border-blue-500 bg-gray-900 p-4 text-white flex flex-col justify-between rounded-xl shadow-xl shadow-blue-500/30">
+            <div key={augmentedMatch.match_id} className="w-full max-w-md border-2 border-blue-500 bg-gray-900 p-4 text-white flex flex-col justify-between rounded-xl shadow-xl shadow-blue-500/30">
               {/* Match Header */}
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-300">{currentLeagueName}</span>
                 {/* TODO: Add LIVE status and time dynamically here using match.start_time */}
-                <span className="text-xs text-gray-400">{new Date(match.start_time).toLocaleDateString()} {new Date(match.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <span className="text-xs text-gray-400">{new Date(augmentedMatch.start_time).toLocaleDateString()} {new Date(augmentedMatch.start_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
               </div>
 
               {/* Teams and Score */}
@@ -293,8 +343,9 @@ export default function Home() {
                 <div className="flex justify-center w-full text-center">
                   {/* Over Section */}
                   <div className="flex-1 max-w-xs bg-gray-800 p-3 rounded-lg border border-gray-600 hover:border-blue-400 transition-colors cursor-pointer">
-                    <div className="text-xs text-gray-400 mb-1">Over ({ Math.floor(overPercentage * 100) + '.' + Math.floor(Math.random() * 90 + 10) }%)</div> {/* Percentage display */}
-                    <div className="text-lg font-semibold text-yellow-300 mb-1">Value: {overValue}</div> {/* Calculated Value */}
+                    <div className="text-xs text-gray-400 mb-1">Over ({ (bookmakerImpliedProbability * 100).toFixed(0) }%)</div> {/* Percentage display based on bookmaker's odds */}
+                    {/* Value is now guaranteed to be non-negative due to the filter */}
+                    <div className="text-lg font-semibold text-yellow-300 mb-1">Value: {displayOverValue}%</div> 
                     <div className="font-extrabold text-xl text-green-400 mb-1">{overOdds > 0 ? overOdds.toFixed(2) : '-'}</div> {/* Display dynamic odds or '-' */}
                   </div>
                 </div>
