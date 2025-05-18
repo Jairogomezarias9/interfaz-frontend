@@ -145,10 +145,6 @@ export default function Home() {
       };
     })
     .filter(augmentedMatch => {
-      // Filter out matches where calculated value is negative
-      return augmentedMatch.numericOverValue >= 0;
-    })
-    .filter(augmentedMatch => {
       // Filter by league if a league is selected
       if (selectedLeague) {
         return augmentedMatch.tournament.name === selectedLeague;
