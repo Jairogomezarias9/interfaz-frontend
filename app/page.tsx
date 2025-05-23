@@ -115,12 +115,13 @@ export default function Home() {
 
       // --- ARTIFICIAL AND RANDOMIZED INFLATION FOR VARIED VALUE ---
       // This makes the "Value" percentages different for each match.
-      const baseInflation = 1.1; // Base factor (e.g., 1.1 means aiming for around +10% value on average)
+      const baseInflation = 0.88; // Adjusted from 1.1 to target ~20% positive value
       const randomVariance = 0.4; // Max random deviation (e.g., 0.4 means +/- 0.2 from baseInflation)
       
       // Calculate a random factor for this specific match
       // This will make randomizedInflationFactor range from (baseInflation - randomVariance/2) to (baseInflation + randomVariance/2)
-      // e.g., with 1.1 base and 0.4 variance: 1.1 +/- 0.2  => ranges from 0.9 to 1.3
+      // e.g., with 0.88 base and 0.4 variance: 0.88 +/- 0.2  => ranges from 0.68 to 1.08
+      // randomizedInflationFactor > 1 occurs if Math.random() > 0.8 (i.e., 20% of the time), leading to positive value.
       const randomizedInflationFactor = baseInflation + (Math.random() * randomVariance) - (randomVariance / 2);
 
       let inflatedProbabilidadEstimacion = originalImpliedProbability * randomizedInflationFactor;
@@ -299,7 +300,7 @@ export default function Home() {
           const overOdds = augmentedMatch.over_2_5_odds ?? 0; // Should always be > 0 here due to filters
 
           // Use pre-calculated values from augmentedMatch
-          const { bookmakerImpliedProbability, displayOverValue } = augmentedMatch;
+          const { bookmakerImpliedProbability, displayOverValue, numericOverValue } = augmentedMatch;
 
           return (
             // Match Container - Now part of a loop
@@ -341,7 +342,7 @@ export default function Home() {
                   <div className="flex-1 max-w-xs bg-gray-800 p-3 rounded-lg border border-gray-600 hover:border-blue-400 transition-colors cursor-pointer">
                     <div className="text-xs text-gray-400 mb-1">Over ({ (bookmakerImpliedProbability * 100).toFixed(0) }%)</div> {/* Percentage display based on bookmaker's odds */}
                     {/* Value is now guaranteed to be non-negative due to the filter */}
-                    <div className="text-lg font-semibold text-yellow-300 mb-1">Value: {displayOverValue}%</div> 
+                    <div className={`text-lg font-semibold mb-1 ${numericOverValue < 0 ? 'text-red-500' : 'text-yellow-300'}`}>Value: {displayOverValue}%</div> 
                     <div className="font-extrabold text-xl text-green-400 mb-1">{overOdds > 0 ? overOdds.toFixed(2) : '-'}</div> {/* Display dynamic odds or '-' */}
                   </div>
                 </div>
