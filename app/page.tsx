@@ -134,7 +134,16 @@ export default function Home() {
       // Use the (randomly inflated) probabilidadEstimacion for value calculation
       const probabilidadEstimacionParaCalculo = inflatedProbabilidadEstimacion;
 
-      const numericOverValue = (probabilidadEstimacionParaCalculo * overOdds) - 1;
+      let numericOverValue = (probabilidadEstimacionParaCalculo * overOdds) - 1;
+      
+      // Cap negative value at -9%
+      if (numericOverValue * 100 < -9) {
+        numericOverValue = -0.09;
+      }
+      if(numericOverValue * 100 ===-9){
+        numericOverValue = -0.09 + Math.random() * 0.03;
+      }
+      
       const displayOverValue = (numericOverValue * 100).toFixed(2);
       
       return {
