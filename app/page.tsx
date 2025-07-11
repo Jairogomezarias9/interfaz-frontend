@@ -1,6 +1,7 @@
 'use client'; // Add this directive for client-side interactivity
 
 import Image from "next/image"; // Make sure Image is imported
+import Link from "next/link";
 import { useState, useEffect } from 'react'; // Import useState and useEffect
 
 // --- Define Interfaces for API Data Structure ---
@@ -239,6 +240,10 @@ export default function Home() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
+                {/* Cuadrante Button */}
+                <Link href="/cuadrante" className="px-4 py-1 bg-blue-600 hover:bg-blue-500 rounded text-sm font-semibold transition-colors whitespace-nowrap">
+                    Cuadrante
+                </Link>
             </div>
             <div className="flex justify-center items-center flex-grow text-white">
                 {searchTerm ? `No matches found for "${searchTerm}".` : (selectedLeague ? "No matches found for this league." : "No matches available.")}
@@ -293,6 +298,10 @@ export default function Home() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
         />
+        {/* Cuadrante Button */}
+        <Link href="/cuadrante" className="px-4 py-1 bg-blue-600 hover:bg-blue-500 rounded text-sm font-semibold transition-colors whitespace-nowrap">
+            Corners
+        </Link>
       </div>
 
       {/* Main Content Area - Added flex-grow, overflow-y-auto for scrolling, and items-start */}
