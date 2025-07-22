@@ -80,9 +80,6 @@ const premierLeagueTeamsData = [
   { name: 'Wolverhampton Wanderers', logo: "/ww.png" },
   { name: 'Nottingham Forest', logo: "/nf.png" },
   { name: 'Bournemouth', logo: "/580b57fcd9996e24bc43c4de.png" },
-  { name: 'Burnley', logo: "/br.png" },
-  { name: 'Sheffield United', logo: "/sh.png" },
-  { name: 'Luton Town', logo: "/lll.png" },
   // New teams from image
   { name: 'Ipswich Town', logo: "/is.png" },
   { name: 'Southampton', logo: "/s.png" },
@@ -738,7 +735,10 @@ export default function CornerStatsPage() {
                   className="bg-gray-800/80 backdrop-blur border-2 border-green-500/30 rounded-xl px-4 py-3 w-full max-w-xs text-center focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition-all duration-300 hover:border-green-400 appearance-none"
                 >
                   <option value="">Select Home Team</option>
-                  {premierLeagueTeams.sort((a,b) => a.name.localeCompare(b.name)).map(team => <option key={team.name} value={team.name}>{team.name}</option>)}
+                  {premierLeagueTeams
+                    .filter(team => team.total_average > 0)
+                    .sort((a,b) => a.name.localeCompare(b.name))
+                    .map(team => <option key={team.name} value={team.name}>{team.name}</option>)}
                 </select>
               </div>
 
@@ -763,7 +763,10 @@ export default function CornerStatsPage() {
                   className="bg-gray-800/80 backdrop-blur border-2 border-green-500/30 rounded-xl px-4 py-3 w-full max-w-xs text-center focus:ring-2 focus:ring-green-400 focus:border-transparent outline-none transition-all duration-300 hover:border-green-400 appearance-none"
                 >
                   <option value="">Select Away Team</option>
-                  {premierLeagueTeams.sort((a,b) => a.name.localeCompare(b.name)).map(team => <option key={team.name} value={team.name}>{team.name}</option>)}
+                  {premierLeagueTeams
+                    .filter(team => team.total_average > 0)
+                    .sort((a,b) => a.name.localeCompare(b.name))
+                    .map(team => <option key={team.name} value={team.name}>{team.name}</option>)}
                 </select>
               </div>
             </div>

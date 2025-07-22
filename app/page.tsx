@@ -197,9 +197,9 @@ export default function Home() {
   // Adjusted condition for empty state
   if (displayedMatches.length === 0 && !isLoading && !error) {
      return (
-        <div className="bg-gradient-to-br from-blue-900 via-black to-blue-700 min-h-screen flex flex-col">
+        <div className="flex-grow flex flex-col">
             {/* Selection Bar */}
-            <div className="w-full p-3 bg-gray-900 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2">
+            <div className="w-full p-3 bg-gray-900/80 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2">
                 <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs">
                     <button
                         onClick={toggleLeagueDropdown}
@@ -240,10 +240,6 @@ export default function Home() {
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                {/* Cuadrante Button */}
-                <Link href="/cuadrante" className="px-4 py-1 bg-blue-600 hover:bg-blue-500 rounded text-sm font-semibold transition-colors whitespace-nowrap">
-                    Cuadrante
-                </Link>
             </div>
             <div className="flex justify-center items-center flex-grow text-white">
                 {searchTerm ? `No matches found for "${searchTerm}".` : (selectedLeague ? "No matches found for this league." : "No matches available.")}
@@ -253,10 +249,10 @@ export default function Home() {
   }
 
   return (
-    // Added flex flex-col to make the root a column flex container
-    <div className="bg-gradient-to-r from-gray-950 via-gray-900 to-blue-950 min-h-screen flex flex-col">
+    // The main container is now just for this page's specific content
+    <div className="flex-grow flex flex-col bg-gradient-to-r from-gray-950 via-gray-900 to-blue-950">
       {/* Selection Bar - Adjusted for search input */}
-      <div className="w-full p-3 bg-gray-900 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2 sticky top-0 z-10">
+      <div className="w-full p-3 bg-gray-900/80 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2 sticky top-0 z-10">
         {/* League Selection Dropdown */}
         <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs"> {/* Adjusted flex properties */}
           <button
@@ -298,10 +294,7 @@ export default function Home() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
         />
-        {/* Cuadrante Button */}
-        <Link href="/cuadrante" className="px-4 py-1 bg-blue-600 hover:bg-blue-500 rounded text-sm font-semibold transition-colors whitespace-nowrap">
-            Corners
-        </Link>
+        
       </div>
 
       {/* Main Content Area - Added flex-grow, overflow-y-auto for scrolling, and items-start */}
