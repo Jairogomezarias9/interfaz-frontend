@@ -151,7 +151,7 @@ export default function Home() {
       inflatedProbabilidadEstimacion = Math.min(inflatedProbabilidadEstimacion, 1.0);
       // Ensure probability is not negative if randomizedInflationFactor was very low (though unlikely with current setup)
       inflatedProbabilidadEstimacion = Math.max(inflatedProbabilidadEstimacion, 0);
-      // --- END OF ARTIFICIAL AND RANDOMIZED INFLATION ---
+      // --- END O AND RANDOMIZED INFLATION ---
 
       // Use the (randomly inflated) probabilidadEstimacion for value calculation
       const probabilidadEstimacionParaCalculo = inflatedProbabilidadEstimacion;
