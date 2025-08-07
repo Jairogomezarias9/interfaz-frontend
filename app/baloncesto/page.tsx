@@ -17,7 +17,6 @@ const sampleMatches: MatchProbabilities[] = [
   { name: 'USA vs SRB', q1: 0.75, q2: 0.70, q3: 0.68, q4: 0.72 },
    { name: 'ITA vs CAN', q1: 0.40, q2: 0.45, q3: 0.42, q4: 0.38 }, //
   { name: 'ESP vs FRA', q1: 0.55, q2: 0.52, q3: 0.50, q4: 0.58 },
- // Not recommended example
 ];
 
 // --- Calculation Function ---
@@ -34,17 +33,17 @@ const MatchCard: React.FC<{ match: MatchProbabilities }> = ({ match }) => {
 
   return (
     <div 
-      className={`w-full max-w-md border-2 p-4 text-white flex flex-col justify-between rounded-xl shadow-xl transition-all duration-300 ${
+      className={`w-full max-w-md border-2 bg-gray-900 p-4 text-white flex flex-col justify-between rounded-xl shadow-xl ${
         isRecommended 
-          ? 'border-orange-500 shadow-orange-500/40 bg-gray-800' 
-          : 'border-gray-700 shadow-gray-800/20 bg-gray-900 opacity-90'
+          ? 'border-orange-500 shadow-orange-500/30' 
+          : 'border-gray-700 shadow-gray-500/20'
       }`}
     >
       {/* Match Header */}
       <div className="flex justify-between items-center mb-3">
         <h2 className="text-lg font-bold text-white">{match.name}</h2>
         <div className="text-right">
-          <span className={`text-2xl font-black ${isRecommended ? 'text-orange-400' : 'text-gray-400'}`}>
+          <span className={`text-2xl font-black ${isRecommended ? 'text-orange-400' : 'text-blue-300'}`}>
             {(totalProb * 100).toFixed(1)}%
           </span>
           <span className="text-gray-400 block text-xs">Total Probability</span>
@@ -72,10 +71,8 @@ const MatchCard: React.FC<{ match: MatchProbabilities }> = ({ match }) => {
       </div>
 
       {isRecommended && (
-        <div className="mt-4 pt-3 border-t border-dashed border-gray-600">
-          <p className="text-center text-sm font-bold text-orange-400 bg-orange-500/10 py-1 px-2 rounded-md">
-            ★ Recommended Match ★
-          </p>
+        <div className="mt-3 text-xs font-semibold text-orange-400/90 border-t border-gray-600 pt-2 text-center">
+          ✓ Suitable for Martingale System
         </div>
       )}
     </div>

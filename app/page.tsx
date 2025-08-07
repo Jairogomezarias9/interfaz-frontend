@@ -27,6 +27,8 @@ interface Match {
   away_team: string;
   btts_odds: number | null;
   combined_odds: number | null;
+  combined_odds_3_5: number | null;
+  combined_odds_4_5: number | null;
   competitors: Competitors;
   home_logo: string; // Note: API seems to provide this but also nested logo? Using nested one.
   home_team: string;
@@ -60,6 +62,10 @@ export default function Home() {
 
   // Selected values now store string for league name
   const [selectedLeague, setSelectedLeague] = useState<string | null>(null);
+  
+  // New state for odds type selection
+  const [selectedOddsType, setSelectedOddsType] = useState<'over_2_5' | 'combined_3_5' | 'combined_4_5'>('over_2_5');
+  const [isOddsTypeOpen, setIsOddsTypeOpen] = useState(false);
 
   // --- Fetch Data Effect ---
   useEffect(() => {
@@ -103,16 +109,31 @@ export default function Home() {
   // --- Derived Data ---
   const uniqueLeagues = Array.from(new Set(apiMatches.map(match => match.tournament.name)));
 
+  // Function to get odds based on selected type
+  const getOddsForType = (match: Match, oddsType: 'over_2_5' | 'combined_3_5' | 'combined_4_5'): number | null => {
+    switch (oddsType) {
+      case 'over_2_5':
+        return match.over_2_5_odds;
+      case 'combined_3_5':
+        return match.combined_odds_3_5;
+      case 'combined_4_5':
+        return match.combined_odds_4_5;
+      default:
+        return null;
+    }
+  };
+
   const displayedMatches: AugmentedMatch[] = apiMatches
     .filter(match => {
-      // Initial filter: ensure over_2_5_odds is valid for calculation
-      return match.over_2_5_odds !== null && match.over_2_5_odds > 0;
+      // Initial filter: ensure selected odds type is valid for calculation
+      const selectedOdds = getOddsForType(match, selectedOddsType);
+      return selectedOdds !== null && selectedOdds > 0;
     })
     .map((match): AugmentedMatch => {
-      const overOdds = match.over_2_5_odds!; // Non-null assertion due to prior filter
+      const selectedOdds = getOddsForType(match, selectedOddsType)!; // Non-null assertion due to prior filter
 
       // Calculate the bookmaker's implied probability from the odds.
-      const originalImpliedProbability = Number((1 / overOdds).toFixed(2));
+      const originalImpliedProbability = Number((1 / selectedOdds).toFixed(2));
 
       // --- ARTIFICIAL AND RANDOMIZED INFLATION FOR VARIED VALUE ---
       // This makes the "Value" percentages different for each match.
@@ -135,7 +156,7 @@ export default function Home() {
       // Use the (randomly inflated) probabilidadEstimacion for value calculation
       const probabilidadEstimacionParaCalculo = inflatedProbabilidadEstimacion;
 
-      let numericOverValue = (probabilidadEstimacionParaCalculo * overOdds) - 1;
+      let numericOverValue = (probabilidadEstimacionParaCalculo * selectedOdds) - 1;
       
       // Cap negative value at -9%
       if (numericOverValue * 100 < -9) {
@@ -178,11 +199,31 @@ export default function Home() {
 
   // --- Toggle Functions ---
   const toggleLeagueDropdown = () => setIsLeagueOpen(!isLeagueOpen);
+  const toggleOddsTypeDropdown = () => setIsOddsTypeOpen(!isOddsTypeOpen);
 
   // --- Selection Functions ---
   const selectLeague = (leagueName: string) => {
     setSelectedLeague(leagueName);
     setIsLeagueOpen(false);
+  };
+
+  const selectOddsType = (oddsType: 'over_2_5' | 'combined_3_5' | 'combined_4_5') => {
+    setSelectedOddsType(oddsType);
+    setIsOddsTypeOpen(false);
+  };
+
+  // --- Helper Functions ---
+  const getOddsTypeLabel = (oddsType: 'over_2_5' | 'combined_3_5' | 'combined_4_5') => {
+    switch (oddsType) {
+      case 'over_2_5':
+        return 'Total Goals +2.5';
+      case 'combined_3_5':
+        return 'Total Goals +3.5';
+      case 'combined_4_5':
+        return 'Total Goals +4.5';
+      default:
+        return 'Total Goals +2.5';
+    }
   };
 
   // --- Render Logic ---
@@ -197,9 +238,41 @@ export default function Home() {
   // Adjusted condition for empty state
   if (displayedMatches.length === 0 && !isLoading && !error) {
      return (
-        <div className="flex-grow flex flex-col">
+        <div className="min-h-screen flex flex-col bg-gradient-to-r from-gray-950 via-gray-900 to-blue-950">
             {/* Selection Bar */}
             <div className="w-full p-3 bg-gray-900/80 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2">
+                {/* Odds Type Selection Dropdown */}
+                <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs">
+                    <button
+                        onClick={toggleOddsTypeDropdown}
+                        className="w-full text-left px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center"
+                    >
+                        <span className="text-sm truncate">{getOddsTypeLabel(selectedOddsType)}</span>
+                        <span className="text-xs">▾</span>
+                    </button>
+                    {isOddsTypeOpen && (
+                        <div className="absolute left-0 mt-1 w-full bg-gray-700 rounded shadow-lg z-30 max-h-60 overflow-y-auto">
+                            <button
+                                onClick={() => selectOddsType('over_2_5')}
+                                className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 ${selectedOddsType === 'over_2_5' ? 'bg-gray-600 font-semibold' : ''}`}
+                            >
+                                Total Goals +2.5
+                            </button>
+                            <button
+                                onClick={() => selectOddsType('combined_3_5')}
+                                className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 ${selectedOddsType === 'combined_3_5' ? 'bg-gray-600 font-semibold' : ''}`}
+                            >
+                                Total Goals +3.5
+                            </button>
+                            <button
+                                onClick={() => selectOddsType('combined_4_5')}
+                                className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 ${selectedOddsType === 'combined_4_5' ? 'bg-gray-600 font-semibold' : ''}`}
+                            >
+                                Total Goals +4.5
+                            </button>
+                        </div>
+                    )}
+                </div>
                 <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs">
                     <button
                         onClick={toggleLeagueDropdown}
@@ -250,9 +323,41 @@ export default function Home() {
 
   return (
     // The main container is now just for this page's specific content
-    <div className="flex-grow flex flex-col bg-gradient-to-r from-gray-950 via-gray-900 to-blue-950">
+    <div className="min-h-screen flex flex-col bg-gradient-to-r from-gray-950 via-gray-900 to-blue-950">
       {/* Selection Bar - Adjusted for search input */}
       <div className="w-full p-3 bg-gray-900/80 flex flex-col sm:flex-row justify-start items-center text-white space-y-2 sm:space-y-0 sm:space-x-2 border-b border-gray-700 px-4 py-2 sticky top-0 z-10">
+        {/* Odds Type Selection Dropdown */}
+        <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs">
+          <button
+            onClick={toggleOddsTypeDropdown}
+            className="w-full text-left px-3 py-1 bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 flex justify-between items-center"
+          >
+            <span className="text-sm truncate">{getOddsTypeLabel(selectedOddsType)}</span>
+            <span className="text-xs">▾</span>
+          </button>
+          {isOddsTypeOpen && (
+            <div className="absolute left-0 mt-1 w-full bg-gray-700 rounded shadow-lg z-30 max-h-60 overflow-y-auto">
+              <button
+                onClick={() => selectOddsType('over_2_5')}
+                className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 ${selectedOddsType === 'over_2_5' ? 'bg-gray-600 font-semibold' : ''}`}
+              >
+                Total Goals +2.5
+              </button>
+              <button
+                onClick={() => selectOddsType('combined_3_5')}
+                className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 ${selectedOddsType === 'combined_3_5' ? 'bg-gray-600 font-semibold' : ''}`}
+              >
+                Total Goals +3.5
+              </button>
+              <button
+                onClick={() => selectOddsType('combined_4_5')}
+                className={`block w-full text-left px-3 py-1 text-sm hover:bg-gray-600 ${selectedOddsType === 'combined_4_5' ? 'bg-gray-600 font-semibold' : ''}`}
+              >
+                Total Goals +4.5
+              </button>
+            </div>
+          )}
+        </div>
         {/* League Selection Dropdown */}
         <div className="relative flex-grow w-full sm:w-auto sm:max-w-xs"> {/* Adjusted flex properties */}
           <button
@@ -308,7 +413,7 @@ export default function Home() {
           const team1Logo = augmentedMatch.competitors.home.logo || defaultLogo;
           const team2Logo = augmentedMatch.competitors.away.logo || defaultLogo;
           const currentLeagueName = augmentedMatch.tournament.name;
-          const overOdds = augmentedMatch.over_2_5_odds ?? 0; // Should always be > 0 here due to filters
+          const selectedOdds = getOddsForType(augmentedMatch, selectedOddsType) ?? 0; // Use the selected odds type
 
           // Use pre-calculated values from augmentedMatch
           const { bookmakerImpliedProbability, displayOverValue, numericOverValue } = augmentedMatch;
@@ -343,9 +448,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* +2.5 Goals Market */}
+              {/* Goals Market */}
               <div className="flex flex-col items-center border-t border-gray-600 pt-4 mt-4">
-                <div className="text-base text-gray-200 mb-3 font-bold">Total Goals +2.5</div>
+                <div className="text-base text-gray-200 mb-3 font-bold">{getOddsTypeLabel(selectedOddsType)}</div>
 
                 {/* Container for the Over section */}
                 <div className="flex justify-center w-full text-center">
@@ -354,7 +459,7 @@ export default function Home() {
                     <div className="text-xs text-gray-400 mb-1">Over ({ (bookmakerImpliedProbability * 100).toFixed(0) }%)</div> {/* Percentage display based on bookmaker's odds */}
                     {/* Value is now guaranteed to be non-negative due to the filter */}
                     <div className={`text-lg font-semibold mb-1 ${numericOverValue < 0 ? 'text-red-500' : 'text-yellow-300'}`}>Value: {displayOverValue}%</div> 
-                    <div className="font-extrabold text-xl text-green-400 mb-1">{overOdds > 0 ? overOdds.toFixed(2) : '-'}</div> {/* Display dynamic odds or '-' */}
+                    <div className="font-extrabold text-xl text-green-400 mb-1">{selectedOdds > 0 ? selectedOdds.toFixed(2) : '-'}</div> {/* Display dynamic odds or '-' */}
                   </div>
                 </div>
               </div>
