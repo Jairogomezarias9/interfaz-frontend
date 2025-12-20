@@ -757,7 +757,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const lateMatches = apiMatches.filter(m => parseMatchTime(m.current_minute) >= 75);
+  const lateMatches = apiMatches.filter(m => parseMatchTime(m.current_minute) >= 65);
   // regularMatches not needed if we just show Everything or Late
 
   if (isLoading && apiMatches.length === 0) {
@@ -787,7 +787,7 @@ export default function Home() {
               className="w-full appearance-none bg-gray-800 text-xs font-bold text-white uppercase tracking-wider py-2 pl-3 pr-8 rounded border border-white/10 hover:border-emerald-500/50 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
             >
               <option value="ALL">All Matches</option>
-              <option value="LATE">Final Stretch (75'+)</option>
+              <option value="LATE">Final Stretch (65'+)</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-emerald-500">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
@@ -825,7 +825,7 @@ export default function Home() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
                     </span>
-                    <h2 className="text-lg font-bold text-white tracking-widest uppercase">Final Stretch (75'+)</h2>
+                    <h2 className="text-lg font-bold text-white tracking-widest uppercase">Final Stretch (65'+)</h2>
                   </div>
                   <div className="flex flex-col space-y-6">
                     {lateMatches.map(match => (
