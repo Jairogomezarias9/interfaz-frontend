@@ -199,7 +199,7 @@ const StatsPanel = ({ stats }: { stats: Stats365 }) => {
             </span>
           ) : (
             <>
-              <span className="text-[8px] text-emerald-500 font-bold">365S</span>
+              {/* <span className="text-[8px] text-emerald-500 font-bold">365S</span> */}
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             </>
           )}
@@ -279,19 +279,17 @@ const MatchCard = ({ match }: { match: Match }) => {
     if (m.stats_365) {
       const s = m.stats_365;
 
-      // A. Territory (Control) -> Based on Possession + Corner Difference
-      let possession = 50;
-      if (s.home.possession) {
-        possession = parseInt(s.home.possession.replace('%', '')) || 50;
-      }
+      // A. Territory (Control) -> Based on Corners ONLY (Possession ignored as requested)
+      // let possession = 50; 
+      // Ignored: const possession = parseInt(s.home.possession.replace('%', '')) || 50;
 
       const hCorners = parseInt(s.home.corners || '0');
       const aCorners = parseInt(s.away.corners || '0');
       const cornerDiff = hCorners - aCorners;
 
-      // Formula: Possession +/- (Corner Diff * 4)
-      // Balanced weight: Significant but not overwhelming.
-      let territory = possession + (cornerDiff * 4);
+      // Formula: Base 50 + (Corner Diff * 5)
+      // We rely purely on Corner pressure to determine "Territory/Tilt"
+      let territory = 50 + (cornerDiff * 5);
       territory = Math.max(0, Math.min(100, territory));
 
       // B. xG (Quality) -> Based on Shots (On/Off) + Goals
@@ -328,13 +326,13 @@ const MatchCard = ({ match }: { match: Match }) => {
       const territoryIntensity = Math.abs(territory - 50) * 2;
 
       // Weights: Accel (45%), xG (35%), Territory (20%) + Flat Bonus
-      // +5 Base Bonus (Middle ground)
-      const rawIndex = (shotAccel * 0.45) + (xGScore * 0.35) + (territoryIntensity * 0.20) + 5;
+      // +10 Base Bonus (Increased from 5 to make it easier to reach)
+      const rawIndex = (shotAccel * 0.45) + (xGScore * 0.35) + (territoryIntensity * 0.20) + 10;
       const pressureIndex = Math.min(99, Math.floor(rawIndex));
 
       // E. Edge (Value) calculation
-      // Threshold 60 (Strict).
-      let rawEdge = Math.max(0, (pressureIndex - 60) * 0.80);
+      // Threshold 50 (Lowered from 60). Multiplier 1.0 (Increased from 0.8).
+      let rawEdge = Math.max(0, (pressureIndex - 50) * 1.0);
 
       // TIME DECAY (Min 80+ adjustment)
       // Value drops as time runs out, unless intensity is extreme.
@@ -370,8 +368,9 @@ const MatchCard = ({ match }: { match: Match }) => {
     const rawIndex = (shotAccel * 0.4) + (territory * 0.4) + (parseFloat(xG) * 10 * 0.2);
     const pressureIndex = Math.min(99, Math.floor(rawIndex));
 
-    // 6. Value Edge Calculation
-    const rawEdge = Math.max(0, (pressureIndex - 60) * 0.5);
+    // 6. Value Edge Calculation (Fallback)
+    // Threshold 50, Multiplier 0.8
+    const rawEdge = Math.max(0, (pressureIndex - 50) * 0.8);
     const edge = Math.floor(rawEdge);
 
     // 7. Recommended Stake
