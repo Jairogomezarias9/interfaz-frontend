@@ -1,0 +1,133 @@
+[
+  {
+    "id": 15235991,
+    "homeTeam": "Paraguay U20",
+    "awayTeam": "Chile U20",
+    "tournament": "U20 Friendly Games, Women",
+    "status": "2nd half",
+    "score": {
+      "home": 3,
+      "away": 0
+    },
+    "minute": "2nd half",
+    "stats": {
+      "ballPossession": {
+        "name": "Ball possession",
+        "home": 48,
+        "away": 52
+      },
+      "cornerKicks": {
+        "name": "Corner kicks",
+        "home": 1,
+        "away": 2
+      },
+      "fouls": {
+        "name": "Fouls",
+        "home": 5,
+        "away": 6
+      }
+    }
+  },
+  {
+    "id": 15207173,
+    "homeTeam": "Universidad Católica U17",
+    "awayTeam": "Colombia U17",
+    "tournament": "Copa Internacional UC Sub-17 - Group A",
+    "status": "1st half",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "minute": "1st half",
+    "stats": {}
+  },
+  {
+    "id": 15177552,
+    "homeTeam": "Nacional Potosí",
+    "awayTeam": "The Strongest",
+    "tournament": "Copa Bolivia, Playoffs",
+    "status": "2nd half",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "minute": "2nd half",
+    "stats": {
+      "ballPossession": {
+        "name": "Ball possession",
+        "home": 55,
+        "away": 45
+      },
+      "cornerKicks": {
+        "name": "Corner kicks",
+        "home": 3,
+        "away": 1
+      },
+      "fouls": {
+        "name": "Fouls",
+        "home": 10,
+        "away": 7
+      },
+      "shotsOnGoal": {
+        "name": "Shots on target",
+        "home": 3,
+        "away": 1
+      },
+      "shotsOffGoal": {
+        "name": "Shots off target",
+        "home": 5,
+        "away": 4
+      }
+    }
+  },
+  {
+    "id": 14538941,
+    "homeTeam": "Cibao FC",
+    "awayTeam": "Club Atlético Pantoja",
+    "tournament": "Liga Dominicana de Fútbol",
+    "status": "1st half",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "minute": "1st half",
+    "stats": {
+      "cornerKicks": {
+        "name": "Corner kicks",
+        "home": 2,
+        "away": 2
+      },
+      "fouls": {
+        "name": "Fouls",
+        "home": 1,
+        "away": 2
+      }
+    }
+  },
+  {
+    "id": 15138688,
+    "homeTeam": "Security Forces United",
+    "awayTeam": "Trafalgar Southstars",
+    "tournament": "SKNFA Division 1",
+    "status": "Started",
+    "score": {
+      "home": 1,
+      "away": 0
+    },
+    "minute": "Started",
+    "stats": {}
+  },
+  {
+    "id": 15237638,
+    "homeTeam": "CA Progreso",
+    "awayTeam": "Bohemios FC",
+    "tournament": "Liga de Paysandú, Zona Campeonato ",
+    "status": "Started",
+    "score": {
+      "home": 0,
+      "away": 0
+    },
+    "minute": "Started",
+    "stats": {}
+  }
+]

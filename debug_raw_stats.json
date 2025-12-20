@@ -1,0 +1,144 @@
+{
+  "incidents": [
+    {
+      "text": "Second half",
+      "homeScore": 3,
+      "awayScore": 0,
+      "isLive": true,
+      "time": 90,
+      "addedTime": 999,
+      "timeSeconds": 5400,
+      "reversedPeriodTime": 1,
+      "reversedPeriodTimeSeconds": 0,
+      "periodTimeSeconds": 2700,
+      "incidentType": "period"
+    },
+    {
+      "rescinded": false,
+      "id": 124454473,
+      "time": 59,
+      "isHome": true,
+      "incidentClass": "red",
+      "reversedPeriodTime": 32,
+      "incidentType": "card"
+    },
+    {
+      "from": "regular",
+      "homeScore": 3,
+      "awayScore": 0,
+      "player": {
+        "name": "Claudia Mart\u00ednez",
+        "firstName": "Claudia Mart\u00ednez",
+        "slug": "claudia-martinez",
+        "shortName": "C. Mart\u00ednez",
+        "position": "F",
+        "jerseyNumber": "16",
+        "userCount": 268,
+        "id": 1889452,
+        "marketValueCurrency": "EUR",
+        "dateOfBirthTimestamp": 1200355200,
+        "fieldTranslations": {
+          "nameTranslation": {
+            "ar": "\u0643\u0644\u0648\u062f\u064a\u0627 \u0645\u0627\u0631\u062a\u064a\u0646\u064a\u0632"
+          },
+          "shortNameTranslation": {
+            "ar": "\u0643. \u0645\u0627\u0631\u062a\u064a\u0646\u064a\u0632"
+          }
+        }
+      },
+      "period": "period2",
+      "id": 332721417,
+      "time": 50,
+      "isHome": true,
+      "incidentClass": "regular",
+      "reversedPeriodTime": 41,
+      "incidentType": "goal"
+    },
+    {
+      "text": "HT",
+      "homeScore": 2,
+      "awayScore": 0,
+      "isLive": false,
+      "time": 45,
+      "addedTime": 999,
+      "timeSeconds": 2700,
+      "reversedPeriodTime": 1,
+      "reversedPeriodTimeSeconds": 0,
+      "periodTimeSeconds": 2700,
+      "incidentType": "period"
+    },
+    {
+      "from": "regular",
+      "homeScore": 2,
+      "awayScore": 0,
+      "player": {
+        "name": "Claudia Mart\u00ednez",
+        "firstName": "Claudia Mart\u00ednez",
+        "slug": "claudia-martinez",
+        "shortName": "C. Mart\u00ednez",
+        "position": "F",
+        "jerseyNumber": "16",
+        "userCount": 268,
+        "id": 1889452,
+        "marketValueCurrency": "EUR",
+        "dateOfBirthTimestamp": 1200355200,
+        "fieldTranslations": {
+          "nameTranslation": {
+            "ar": "\u0643\u0644\u0648\u062f\u064a\u0627 \u0645\u0627\u0631\u062a\u064a\u0646\u064a\u0632"
+          },
+          "shortNameTranslation": {
+            "ar": "\u0643. \u0645\u0627\u0631\u062a\u064a\u0646\u064a\u0632"
+          }
+        }
+      },
+      "period": "period1",
+      "id": 332719916,
+      "time": 35,
+      "isHome": true,
+      "incidentClass": "regular",
+      "reversedPeriodTime": 11,
+      "incidentType": "goal"
+    },
+    {
+      "from": "regular",
+      "homeScore": 1,
+      "awayScore": 0,
+      "playerName": "Kiara Florent\u00edn",
+      "period": "period1",
+      "id": 332719920,
+      "time": 32,
+      "isHome": true,
+      "incidentClass": "regular",
+      "reversedPeriodTime": 14,
+      "incidentType": "goal"
+    }
+  ],
+  "home": {
+    "goalkeeperColor": {
+      "primary": "000000",
+      "number": "222226",
+      "outline": "039603",
+      "fancyNumber": "222226"
+    },
+    "playerColor": {
+      "primary": "000000",
+      "number": "000000",
+      "outline": "ffffff",
+      "fancyNumber": "222226"
+    }
+  },
+  "away": {
+    "goalkeeperColor": {
+      "primary": "000000",
+      "number": "222226",
+      "outline": "e02576",
+      "fancyNumber": "222226"
+    },
+    "playerColor": {
+      "primary": "000000",
+      "number": "222226",
+      "outline": "c02c22",
+      "fancyNumber": "222226"
+    }
+  }
+}

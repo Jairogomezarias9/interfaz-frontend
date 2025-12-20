@@ -1,0 +1,1844 @@
+[
+  {
+    "id": 4459294,
+    "homeTeam": "Armagh City",
+    "awayTeam": "Ballinamallard United",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 3.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4459757,
+    "homeTeam": "Warrenpoint Town",
+    "awayTeam": "Loughgall FC",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4491245,
+    "homeTeam": "E.N. Paralimni",
+    "awayTeam": "Akritas Chloraka",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "57%",
+        "total_shots": "9",
+        "shots_on_goal": "5",
+        "corners": "6",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "blocked_shots": "0",
+        "yellow_cards": "3"
+      },
+      "away": {
+        "possession": "43%",
+        "total_shots": "4",
+        "shots_on_goal": "2",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "4"
+      }
+    }
+  },
+  {
+    "id": 4491644,
+    "homeTeam": "Folkestone Invicta",
+    "awayTeam": "Canvey Island",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4491648,
+    "homeTeam": "Chichester City",
+    "awayTeam": "Hashtag United",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "red_cards": "1",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4491650,
+    "homeTeam": "Brentwood Town",
+    "awayTeam": "Potters Bar Town",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4492732,
+    "homeTeam": "Redditch Utd",
+    "awayTeam": "AFC Sudbury",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 2.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4492735,
+    "homeTeam": "Halesowen Town",
+    "awayTeam": "Leiston",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 2.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4492739,
+    "homeTeam": "Yate Town",
+    "awayTeam": "Taunton Town",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 2.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4492743,
+    "homeTeam": "Poole Town",
+    "awayTeam": "Sholing",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4492744,
+    "homeTeam": "Havant & waterloovile",
+    "awayTeam": "Wimborne Town",
+    "displayStatus": null,
+    "homeScore": 4.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4494362,
+    "homeTeam": "Lewes",
+    "awayTeam": "Welling Utd",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "red_cards": "1",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4500192,
+    "homeTeam": "Bury Town",
+    "awayTeam": "Stourbridge",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4544803,
+    "homeTeam": "El Gounah",
+    "awayTeam": "Pyramids",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "62%",
+        "total_shots": "8",
+        "shots_on_goal": "5",
+        "corners": "3",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "38%",
+        "total_shots": "3",
+        "shots_on_goal": "1",
+        "corners": "3",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4625434,
+    "homeTeam": "Foolad Khuzestan",
+    "awayTeam": "Chadormalu Sc",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "corners": "3",
+        "red_cards": "0",
+        "yellow_cards": "3"
+      },
+      "away": {
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4467928,
+    "homeTeam": "Marbella",
+    "awayTeam": "Hércules",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "56%",
+        "total_shots": "7",
+        "shots_on_goal": "3",
+        "corners": "6",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "44%",
+        "total_shots": "3",
+        "shots_on_goal": "3",
+        "corners": "4",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4467935,
+    "homeTeam": "Celta de Vigo B",
+    "awayTeam": "Real Madrid Castilla",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "42%",
+        "total_shots": "7",
+        "shots_on_goal": "3",
+        "corners": "5",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "2",
+        "yellow_cards": "4"
+      },
+      "away": {
+        "possession": "58%",
+        "total_shots": "16",
+        "shots_on_goal": "4",
+        "corners": "4",
+        "red_cards": "1",
+        "shots_off_goal": "7",
+        "blocked_shots": "5",
+        "yellow_cards": "4"
+      }
+    }
+  },
+  {
+    "id": 4468258,
+    "homeTeam": "Huesca",
+    "awayTeam": "Racing de Santander",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "49%",
+        "total_shots": "15",
+        "shots_on_goal": "3",
+        "corners": "8",
+        "passes_completed": "334",
+        "red_cards": "0",
+        "shots_off_goal": "6",
+        "blocked_shots": "6",
+        "yellow_cards": "5"
+      },
+      "away": {
+        "possession": "51%",
+        "total_shots": "10",
+        "shots_on_goal": "3",
+        "corners": "3",
+        "passes_completed": "375",
+        "red_cards": "0",
+        "shots_off_goal": "3",
+        "blocked_shots": "4",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4469158,
+    "homeTeam": "Levante UD",
+    "awayTeam": "Real Sociedad",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "44%",
+        "total_shots": "13",
+        "shots_on_goal": "3",
+        "corners": "7",
+        "passes_completed": "279",
+        "shots_off_goal": "5",
+        "blocked_shots": "5",
+        "yellow_cards": "6"
+      },
+      "away": {
+        "possession": "56%",
+        "total_shots": "18",
+        "shots_on_goal": "6",
+        "corners": "10",
+        "passes_completed": "390",
+        "shots_off_goal": "7",
+        "blocked_shots": "5",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4516024,
+    "homeTeam": "St Joseph's",
+    "awayTeam": "Magpies",
+    "displayStatus": null,
+    "homeScore": 4.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "corners": "5",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "corners": "4",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4492742,
+    "homeTeam": "Tiverton Town",
+    "awayTeam": "Dorchester Town",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4492751,
+    "homeTeam": "Hebburn Town",
+    "awayTeam": "Guiseley AFC",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "50%",
+        "corners": "3",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "50%",
+        "corners": "6",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4453275,
+    "homeTeam": "TOP Oss",
+    "awayTeam": "De Graafschap",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 3.0,
+    "stats": {
+      "home": {
+        "possession": "29%",
+        "total_shots": "7",
+        "shots_on_goal": "2",
+        "corners": "4",
+        "passes_completed": "160",
+        "red_cards": "0",
+        "shots_off_goal": "3",
+        "blocked_shots": "2",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "71%",
+        "total_shots": "18",
+        "shots_on_goal": "6",
+        "corners": "6",
+        "passes_completed": "499",
+        "red_cards": "0",
+        "shots_off_goal": "7",
+        "blocked_shots": "5",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4453529,
+    "homeTeam": "Heracles",
+    "awayTeam": "Heerenveen",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 2.0,
+    "stats": {
+      "home": {
+        "possession": "42%",
+        "total_shots": "7",
+        "shots_on_goal": "1",
+        "corners": "4",
+        "passes_completed": "263",
+        "red_cards": "0",
+        "shots_off_goal": "3",
+        "blocked_shots": "3",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "58%",
+        "total_shots": "13",
+        "shots_on_goal": "7",
+        "corners": "4",
+        "passes_completed": "391",
+        "red_cards": "0",
+        "shots_off_goal": "6",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4463457,
+    "homeTeam": "Hapoel Jerusalem",
+    "awayTeam": "Hapoel Haifa",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "61%",
+        "total_shots": "15",
+        "shots_on_goal": "3",
+        "corners": "2",
+        "passes_completed": "463",
+        "red_cards": "0",
+        "shots_off_goal": "5",
+        "blocked_shots": "7",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "39%",
+        "total_shots": "9",
+        "shots_on_goal": "2",
+        "corners": "5",
+        "passes_completed": "286",
+        "red_cards": "0",
+        "shots_off_goal": "6",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4468694,
+    "homeTeam": "Utebo FC",
+    "awayTeam": "Deportivo Alavés B",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "62%",
+        "corners": "3",
+        "red_cards": "0",
+        "yellow_cards": "4"
+      },
+      "away": {
+        "possession": "38%",
+        "corners": "5",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4470772,
+    "homeTeam": "CD Basconia",
+    "awayTeam": "Sestao River",
+    "displayStatus": null,
+    "homeScore": 3.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "54%",
+        "corners": "6",
+        "red_cards": "0",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "46%",
+        "corners": "8",
+        "red_cards": "0",
+        "yellow_cards": "4"
+      }
+    }
+  },
+  {
+    "id": 4473751,
+    "homeTeam": "1860 München",
+    "awayTeam": "SC Verl",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 2.0,
+    "stats": {
+      "home": {
+        "possession": "43%",
+        "total_shots": "8",
+        "shots_on_goal": "5",
+        "corners": "3",
+        "red_cards": "1",
+        "shots_off_goal": "3",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "57%",
+        "total_shots": "12",
+        "shots_on_goal": "5",
+        "corners": "7",
+        "red_cards": "0",
+        "shots_off_goal": "7",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4475318,
+    "homeTeam": "Vizela",
+    "awayTeam": "Viseu",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "44%",
+        "total_shots": "4",
+        "shots_on_goal": "1",
+        "corners": "3",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "2",
+        "yellow_cards": "4"
+      },
+      "away": {
+        "possession": "56%",
+        "total_shots": "9",
+        "shots_on_goal": "0",
+        "corners": "5",
+        "red_cards": "0",
+        "shots_off_goal": "5",
+        "blocked_shots": "4",
+        "yellow_cards": "5"
+      }
+    }
+  },
+  {
+    "id": 4475323,
+    "homeTeam": "CD Feirense",
+    "awayTeam": "Paços de Ferreira",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "55%",
+        "total_shots": "17",
+        "shots_on_goal": "3",
+        "corners": "5",
+        "red_cards": "1",
+        "shots_off_goal": "9",
+        "blocked_shots": "5",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "45%",
+        "total_shots": "7",
+        "shots_on_goal": "2",
+        "corners": "0",
+        "red_cards": "1",
+        "shots_off_goal": "2",
+        "blocked_shots": "3",
+        "yellow_cards": "4"
+      }
+    }
+  },
+  {
+    "id": 4521980,
+    "homeTeam": "Bechem United",
+    "awayTeam": "Swedru All Blacks",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "50%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "shots_off_goal": "0",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "50%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "shots_off_goal": "0",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4610182,
+    "homeTeam": "Al Ain",
+    "awayTeam": "Kalba",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "60%",
+        "total_shots": "10",
+        "shots_on_goal": "3",
+        "corners": "4",
+        "passes_completed": "445",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "blocked_shots": "3",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "40%",
+        "total_shots": "12",
+        "shots_on_goal": "2",
+        "corners": "3",
+        "passes_completed": "275",
+        "red_cards": "0",
+        "shots_off_goal": "7",
+        "blocked_shots": "3",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4468708,
+    "homeTeam": "Estepona",
+    "awayTeam": "UD Almeria B",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4470778,
+    "homeTeam": "UD Poblense",
+    "awayTeam": "Terrassa FC",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "55%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "3"
+      },
+      "away": {
+        "possession": "45%",
+        "corners": "5",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4472827,
+    "homeTeam": "SD Amorebieta",
+    "awayTeam": "UD Mutilvera",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "71%",
+        "corners": "8",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "29%",
+        "corners": "1",
+        "red_cards": "1",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4473193,
+    "homeTeam": "Bergantiños FC",
+    "awayTeam": "Sámano",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "65%",
+        "corners": "5",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "35%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4477727,
+    "homeTeam": "Manisa Buyuksehir Belediye Spor",
+    "awayTeam": "Keciorengucu",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 3.0,
+    "stats": {
+      "home": {
+        "possession": "56%",
+        "total_shots": "12",
+        "shots_on_goal": "6",
+        "corners": "3",
+        "passes_completed": "217",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "blocked_shots": "2",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "44%",
+        "total_shots": "10",
+        "shots_on_goal": "4",
+        "corners": "3",
+        "passes_completed": "153",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "blocked_shots": "2",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4480949,
+    "homeTeam": "Volos NFC",
+    "awayTeam": "Panaitolikos",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "64%",
+        "total_shots": "6",
+        "shots_on_goal": "2",
+        "corners": "3",
+        "passes_completed": "347",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "3",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "36%",
+        "total_shots": "7",
+        "shots_on_goal": "2",
+        "corners": "2",
+        "passes_completed": "176",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4522961,
+    "homeTeam": "Riffa Club",
+    "awayTeam": "Al Ahli Manama",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "66%",
+        "corners": "4",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "34%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4633475,
+    "homeTeam": "AS Real Bamako",
+    "awayTeam": "USFAS Bamako",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "51%",
+        "corners": "2",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "49%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4633480,
+    "homeTeam": "Korofina",
+    "awayTeam": "Mali Coura",
+    "displayStatus": null,
+    "homeScore": 2.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "41%",
+        "corners": "5",
+        "red_cards": "0",
+        "yellow_cards": "3"
+      },
+      "away": {
+        "possession": "59%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4511287,
+    "homeTeam": "Avellino",
+    "awayTeam": "Palermo",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "53%",
+        "total_shots": "5",
+        "shots_on_goal": "2",
+        "corners": "1",
+        "passes_completed": "203",
+        "shots_off_goal": "1",
+        "blocked_shots": "2",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "47%",
+        "total_shots": "5",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "175",
+        "shots_off_goal": "4",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4463458,
+    "homeTeam": "Bnei Sakhnin",
+    "awayTeam": "SC Ashdod",
+    "displayStatus": null,
+    "homeScore": 3.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "43%",
+        "total_shots": "8",
+        "shots_on_goal": "4",
+        "corners": "1",
+        "passes_completed": "149",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "2",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "57%",
+        "total_shots": "8",
+        "shots_on_goal": "4",
+        "corners": "2",
+        "passes_completed": "201",
+        "red_cards": "0",
+        "shots_off_goal": "3",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4463461,
+    "homeTeam": "Hapoel Petah Tikva",
+    "awayTeam": "Kiryat Shmona",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "42%",
+        "total_shots": "3",
+        "shots_on_goal": "1",
+        "corners": "2",
+        "passes_completed": "142",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "1",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "58%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "205",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4470773,
+    "homeTeam": "Fuenlabrada",
+    "awayTeam": "Elche Ilicitano",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "55%",
+        "corners": "5",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "45%",
+        "corners": "4",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4470785,
+    "homeTeam": "Extremadura UD",
+    "awayTeam": "Xerez",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "47%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "53%",
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4507258,
+    "homeTeam": "Pineto",
+    "awayTeam": "Gubbio",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "53%",
+        "total_shots": "5",
+        "shots_on_goal": "3",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "47%",
+        "total_shots": "3",
+        "shots_on_goal": "2",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4507260,
+    "homeTeam": "Virtus Verona",
+    "awayTeam": "Lumezzane",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "42%",
+        "total_shots": "9",
+        "shots_on_goal": "4",
+        "corners": "4",
+        "red_cards": "0",
+        "shots_off_goal": "5",
+        "yellow_cards": "2"
+      },
+      "away": {
+        "possession": "58%",
+        "total_shots": "2",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4507262,
+    "homeTeam": "Pro Patria",
+    "awayTeam": "Renate",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 2.0,
+    "stats": {
+      "home": {
+        "possession": "55%",
+        "total_shots": "7",
+        "shots_on_goal": "4",
+        "corners": "4",
+        "red_cards": "0",
+        "shots_off_goal": "3",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "45%",
+        "total_shots": "6",
+        "shots_on_goal": "2",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "4",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4508520,
+    "homeTeam": "Sambenedettese",
+    "awayTeam": "Vis Pesaro",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "53%",
+        "total_shots": "2",
+        "shots_on_goal": "2",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "47%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4508523,
+    "homeTeam": "Livorno",
+    "awayTeam": "Pontedera",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "49%",
+        "total_shots": "2",
+        "shots_on_goal": "1",
+        "corners": "0",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "51%",
+        "total_shots": "5",
+        "shots_on_goal": "0",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "5",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4629567,
+    "homeTeam": "Abilashehar Club",
+    "awayTeam": "Olympic Zawiya",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  },
+  {
+    "id": 4453012,
+    "homeTeam": "Dinamo Zagreb",
+    "awayTeam": "NK Lokomotiva Zagreb",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "48%",
+        "total_shots": "5",
+        "shots_on_goal": "2",
+        "passes_completed": "115",
+        "shots_off_goal": "2",
+        "blocked_shots": "1",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "52%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "passes_completed": "125",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "2"
+      }
+    }
+  },
+  {
+    "id": 4472828,
+    "homeTeam": "CD Coria",
+    "awayTeam": "RSD Alcalá",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "47%",
+        "corners": "3",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "53%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4445872,
+    "homeTeam": "Lazio",
+    "awayTeam": "Cremonese",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "60%",
+        "total_shots": "0",
+        "passes_completed": "125",
+        "shots_off_goal": "0"
+      },
+      "away": {
+        "possession": "40%",
+        "total_shots": "2",
+        "passes_completed": "77",
+        "shots_off_goal": "2"
+      }
+    }
+  },
+  {
+    "id": 4449942,
+    "homeTeam": "IMT Novi Beograd",
+    "awayTeam": "Partizan Belgrade",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "41%",
+        "total_shots": "4",
+        "shots_on_goal": "2",
+        "corners": "2",
+        "passes_completed": "37",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "59%",
+        "total_shots": "1",
+        "shots_on_goal": "1",
+        "corners": "0",
+        "passes_completed": "68",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4450981,
+    "homeTeam": "Gyori Eto FC",
+    "awayTeam": "Puskas FC Academy",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "75%",
+        "total_shots": "5",
+        "shots_on_goal": "4",
+        "corners": "1",
+        "passes_completed": "126",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "25%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "30",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4456177,
+    "homeTeam": "Ac Bellinzona",
+    "awayTeam": "FC Wil 1900",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "35%",
+        "total_shots": "2",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "39",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "65%",
+        "total_shots": "2",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "79",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4456283,
+    "homeTeam": "FC Thun",
+    "awayTeam": "FC Zürich",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "33%",
+        "total_shots": "3",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "17",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "2",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "67%",
+        "total_shots": "4",
+        "shots_on_goal": "2",
+        "corners": "1",
+        "passes_completed": "31",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "1",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4468703,
+    "homeTeam": "Andratx",
+    "awayTeam": "UD Barbastro",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "50%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "50%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4468706,
+    "homeTeam": "UP Langreo",
+    "awayTeam": "Valladolid B",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "50%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "50%",
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4468709,
+    "homeTeam": "Antoniano",
+    "awayTeam": "Deportiva Minera",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "56%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "44%",
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4475620,
+    "homeTeam": "Besiktas",
+    "awayTeam": "Rizespor",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "62%",
+        "total_shots": "3",
+        "shots_on_goal": "1",
+        "corners": "1",
+        "passes_completed": "97",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "38%",
+        "total_shots": "2",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "58",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4491248,
+    "homeTeam": "Anorthosis",
+    "awayTeam": "Olympiakos Nicosia",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "44%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "56%",
+        "total_shots": "2",
+        "shots_on_goal": "1",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4513611,
+    "homeTeam": "CR Belouizdad",
+    "awayTeam": "Olympique Akbou",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "55%",
+        "total_shots": "2",
+        "shots_on_goal": "1",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "45%",
+        "total_shots": "3",
+        "shots_on_goal": "2",
+        "corners": "0",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4517532,
+    "homeTeam": "Beitar Jerusalem Sub19",
+    "awayTeam": "Hapoel Tel Aviv Sub19",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "58%",
+        "corners": "1",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "42%",
+        "corners": "2",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4532027,
+    "homeTeam": "Hapoel Umm El Fahem",
+    "awayTeam": "Hapoel Ironi Baka El Garbia",
+    "displayStatus": null,
+    "homeScore": 1.0,
+    "awayScore": 1.0,
+    "stats": {
+      "home": {
+        "possession": "40%",
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "60%",
+        "corners": "1",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4625394,
+    "homeTeam": "Raon L Etape",
+    "awayTeam": "Paris FC",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "26%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "22",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "74%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "3",
+        "passes_completed": "93",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4625398,
+    "homeTeam": "Grenoble",
+    "awayTeam": "Nancy",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "51%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "87",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "49%",
+        "total_shots": "2",
+        "shots_on_goal": "0",
+        "corners": "2",
+        "passes_completed": "78",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "1",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4625406,
+    "homeTeam": "Lyon Duchère",
+    "awayTeam": "Toulouse",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "30%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "46",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "1",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "70%",
+        "total_shots": "3",
+        "shots_on_goal": "1",
+        "corners": "2",
+        "passes_completed": "120",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "2",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4625412,
+    "homeTeam": "SA Merignac",
+    "awayTeam": "Istres",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "50%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      },
+      "away": {
+        "possession": "50%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4625541,
+    "homeTeam": "Bethune",
+    "awayTeam": "Sochaux",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "38%",
+        "total_shots": "2",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "27",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "62%",
+        "total_shots": "1",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "70",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "1"
+      }
+    }
+  },
+  {
+    "id": 4627826,
+    "homeTeam": "Pontivy",
+    "awayTeam": "Bastia",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "46%",
+        "total_shots": "2",
+        "shots_on_goal": "1",
+        "corners": "1",
+        "red_cards": "0",
+        "shots_off_goal": "1",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "54%",
+        "total_shots": "3",
+        "shots_on_goal": "1",
+        "corners": "2",
+        "red_cards": "0",
+        "shots_off_goal": "2",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4457543,
+    "homeTeam": "KVC Westerlo",
+    "awayTeam": "La Louvière Centre",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "82%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "1",
+        "passes_completed": "14",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "18%",
+        "total_shots": "0",
+        "shots_on_goal": "0",
+        "corners": "0",
+        "passes_completed": "1",
+        "red_cards": "0",
+        "shots_off_goal": "0",
+        "blocked_shots": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4503751,
+    "homeTeam": "Fiori",
+    "awayTeam": "Faetano",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {
+        "possession": "63%",
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      },
+      "away": {
+        "possession": "37%",
+        "corners": "0",
+        "red_cards": "0",
+        "yellow_cards": "0"
+      }
+    }
+  },
+  {
+    "id": 4613539,
+    "homeTeam": "Floriana FC",
+    "awayTeam": "Sliema Wanderers",
+    "displayStatus": null,
+    "homeScore": 0.0,
+    "awayScore": 0.0,
+    "stats": {
+      "home": {},
+      "away": {}
+    }
+  }
+]
