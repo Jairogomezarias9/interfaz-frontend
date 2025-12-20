@@ -654,7 +654,7 @@ export default function Home() {
 
       setError(null);
       try {
-        const response = await fetch("http://185.254.96.194:8001/api/fast-odds");
+        const response = await fetch("/api/odds");
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data: { matches: Match[] } = await response.json();
 
