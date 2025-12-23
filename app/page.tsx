@@ -146,8 +146,18 @@ const TeamLogo = ({ name, className, defaultColor }: { name: string, className?:
 // --- Helper: Parse Minute ---
 const parseMatchTime = (timeStr?: string): number => {
   if (!timeStr) return 0;
-  // Handle "HT"
-  if (timeStr === "HT") return 45;
+
+  // Normalize to lowercase for easier matching
+  const normalized = timeStr.toLowerCase().trim();
+
+  // Handle halftime
+  if (normalized === "ht" ||
+    normalized === "medio tiempo" ||
+    normalized === "halftime" ||
+    normalized === "half time" ||
+    normalized === "descanso") {
+    return 45;
+  }
 
   // Handle "90+2" or "45+1"
   if (timeStr.includes('+')) {
@@ -227,27 +237,39 @@ const StatsPanel = ({ stats }: { stats: Stats365 }) => {
 const MatchCard = ({ match }: { match: Match }) => {
   // Helper to find best odd
   const getBestOdd = (m: Match) => {
-    const lines = [
-      { key: 'over_2_5_odds', label: 'Over 2.5 Goals' },
-      { key: 'over_1_5_odds', label: 'Over 1.5 Goals' },
-      { key: 'combined_odds_3_5', label: 'Over 3.5 Goals' },
-      { key: 'over_0_5_odds', label: 'Over 0.5 Goals' },
-      { key: 'combined_odds_4_5', label: 'Over 4.5 Goals' },
-      { key: 'over_1_odds', label: 'Over 1.0 Goals' },
-      { key: 'over_2_odds', label: 'Over 2.0 Goals' },
-      { key: 'over_3_odds', label: 'Over 3.0 Goals' },
-      { key: 'over_4_odds', label: 'Over 4.0 Goals' },
-      { key: 'over_5_5_odds', label: 'Over 5.5 Goals' },
-    ];
-    for (const line of lines) {
-      // @ts-ignore
-      const val = m[line.key];
-      if (val) {
-        const num = typeof val === 'string' ? parseFloat(val) : val;
-        if (!isNaN(num) && num > 0) return { value: num, label: line.label };
+    // Parse scores safely
+    const home = parseInt(m.home_score || '0');
+    const away = parseInt(m.away_score || '0');
+    const total = isNaN(home) || isNaN(away) ? 0 : home + away;
+
+    // Target line: Total + 0.5
+    // Example: 1-1 (2) -> Target 2.5
+    const targetMain = total + 0.5;
+
+    // Construct the keys to look for. 
+    // Format in scraping seems to be: over_X_5_odds (e.g. over_2_5_odds)
+    // For integer totals like 2, target is 2.5, key is over_2_5_odds
+
+    const targetKey = `over_${Math.floor(targetMain)}_5_odds`;
+
+    // Also support "combined_odds_3_5" legacy naming if it exists? 
+    // In scraper_fast.py we map 3.5 -> combined_odds_3_5 and 4.5 -> combined_odds_4_5
+    // We should check those specific cases.
+    let finalKey = targetKey;
+    if (targetMain === 3.5) finalKey = 'combined_odds_3_5';
+    if (targetMain === 4.5) finalKey = 'combined_odds_4_5';
+
+    // @ts-ignore
+    const val = m[finalKey];
+
+    if (val) {
+      const num = typeof val === 'string' ? parseFloat(val) : val;
+      if (!isNaN(num) && num > 0) {
+        return { value: num, label: `Over ${targetMain} Goals` };
       }
     }
-    return { value: 0, label: 'Markets Closed' };
+
+    return { value: 0, label: `Over ${targetMain} (N/A)` };
   };
 
   const bestOdd = getBestOdd(match);
@@ -286,53 +308,132 @@ const MatchCard = ({ match }: { match: Match }) => {
       const hCorners = parseInt(s.home.corners || '0');
       const aCorners = parseInt(s.away.corners || '0');
       const cornerDiff = hCorners - aCorners;
+      const hGoals = parseInt(m.home_score || '0');
+      const aGoals = parseInt(m.away_score || '0');
 
       // Formula: Base 50 + (Corner Diff * 5)
       // We rely purely on Corner pressure to determine "Territory/Tilt"
       let territory = 50 + (cornerDiff * 5);
-      territory = Math.max(0, Math.min(100, territory));
 
-      // B. xG (Quality) -> Based on Shots (On/Off) + Goals
-      // User Logic: "Too strict" -> We add Off-Target shots and boost weights.
+      // PRESSURE BONUS: Apply multiplier if pressuring team needs a goal
+      // Teams pressuring while NOT winning get a bonus (they need goals urgently)
+      let pressureBonus = 1.0; // Default: no bonus
+
+      if (Math.abs(cornerDiff) >= 2) { // Only if corner difference is significant (2+)
+        const homePressuring = cornerDiff > 0; // Home has more corners
+        const awayPressuring = cornerDiff < 0; // Away has more corners
+
+        if (homePressuring) {
+          // Home is pressuring
+          if (hGoals < aGoals) {
+            pressureBonus = 1.20; // Losing: +20% urgency bonus
+          } else if (hGoals === aGoals) {
+            pressureBonus = 1.10; // Drawing: +10% urgency bonus
+          }
+          // If hGoals > aGoals: winning, no bonus (standard calculation)
+        } else if (awayPressuring) {
+          // Away is pressuring
+          if (aGoals < hGoals) {
+            pressureBonus = 1.20; // Losing: +20% urgency bonus
+          } else if (aGoals === hGoals) {
+            pressureBonus = 1.10; // Drawing: +10% urgency bonus
+          }
+          // If aGoals > hGoals: winning, no bonus (standard calculation)
+        }
+      }
+
+      // Apply pressure bonus (affects how far from neutral 50 the value goes)
+      const territoryDiff = territory - 50;
+      territory = 50 + (territoryDiff * pressureBonus);
+
+      // Cap at 0-99
+      territory = Math.max(0, Math.min(99, territory));
+
+      // B. xG (Quality) -> Based on Shot Volume + Accuracy + Goals (TIME-NORMALIZED)
+      // Formula: (Volume * Accuracy Multiplier + Goal Bonus) * Time Projection to 90min
       const hOn = parseInt(s.home.shots_on_goal || '0');
       const aOn = parseInt(s.away.shots_on_goal || '0');
       const hOff = parseInt(s.home.shots_off_goal || '0');
       const aOff = parseInt(s.away.shots_off_goal || '0');
-      const hGoals = parseInt(m.home_score || '0');
-      const aGoals = parseInt(m.away_score || '0');
+      // hGoals and aGoals already declared above in Territory Control section
 
-      // Balanced Weights:
-      // - Goal: 0.75
-      // - On Target: 0.4
-      // - Off Target: 0.1
-      const rawXG = ((hOn + aOn) * 0.4) + ((hOff + aOff) * 0.1) + ((hGoals + aGoals) * 0.75);
-      const xGValue = rawXG.toFixed(2);
+      // Total shots (volume)
+      const totalOn = hOn + aOn;
+      const totalOff = hOff + aOff;
+      const totalShotsFired = totalOn + totalOff;
 
-      // C. Shot Acceleration (Intensity) -> Total Shots / Minute
-      const totalShots = parseInt(s.home.total_shots || '0') + parseInt(s.away.total_shots || '0');
+      // Accuracy: What proportion of shots are on target?
+      // Higher accuracy = better quality chances
+      const accuracy = totalShotsFired > 0 ? (totalOn / totalShotsFired) : 0;
+
+      // Base xG from shots with accuracy multiplier
+      // - Base value: 0.15 per shot (average)
+      // - Accuracy bonus: up to 1.5x multiplier (50% on target = 1.0x, 100% = 1.5x)
+      const accuracyMultiplier = 1.0 + (accuracy * 0.5);
+      const shotBasedXG = totalShotsFired * 0.15 * accuracyMultiplier;
+
+      // Goal bonus: Small additive bonus, not dominant
+      // 0.3 per goal (less than a shot's base value)
+      const goalBonus = (hGoals + aGoals) * 0.3;
+
+      const currentXG = shotBasedXG + goalBonus;
+
+      // TIME NORMALIZATION: Project to full 90-minute game
+      // So 10 shots at min 60 is weighted higher than 10 shots at min 85
       const safeMin = minute < 1 ? 1 : minute;
+      const projectionFactor = 90 / safeMin; // e.g., min 60 -> 1.5x, min 30 -> 3.0x
+      const projectedXG = currentXG * projectionFactor;
 
-      // Ratio: shots per minute. 
-      // Scale: 100 index = 1.0 shots/min is high intensity but achievable.
-      // Adjusted: 1.0 shot/min = 120 index.
-      const shotsPerMin = totalShots / safeMin;
-      const shotAccel = Math.min(99, Math.floor(shotsPerMin * 120));
+      const xGValue = projectedXG.toFixed(2);
 
-      // D. Pressure Index (Combined) -> Weighted calculation
+      // C. Shot Acceleration (Intensity) -> Weighted Shots / Minute (TIME-NORMALIZED)
+      // Quality weighting: On-target shots count 3x more than off-target/blocked
+      // This rewards teams creating dangerous chances, not just volume
+
+      // Already have totalOn from xG calculation above
+      // Calculate off-target + blocked shots
+      const hBlocked = parseInt(s.home.blocked_shots || '0');
+      const aBlocked = parseInt(s.away.blocked_shots || '0');
+      const totalOffAndBlocked = totalOff + hBlocked + aBlocked;
+
+      // Weighted shot calculation:
+      // - On target: 3x weight (high quality)
+      // - Off target + blocked: 1x weight (standard)
+      const weightedShots = (totalOn * 3) + (totalOffAndBlocked * 1);
+
+      // Normalize by time: weighted shots per minute
+      // Scale: ~0.5 weighted shots/min (after weighting) = 100 index
+      // Formula adjusted: multiply by 200 so 0.5/min gives 100
+      const weightedShotsPerMin = weightedShots / safeMin;
+      const shotAccel = Math.min(99, Math.floor(weightedShotsPerMin * 200));
+
+      // D. Pressure Index (Combined) -> Weighted calculation with consistency check
       // Normalize xG to a 0-100 scale. 
-      // 2.5 xG -> 100 Index. (Previous 5.0 was too hard to reach).
-      const xGScore = Math.min(100, parseFloat(xGValue) * 40);
+      // Target: ~6.0 projected xG (aggressive 90min pace) -> 100 Index
+      // Formula: xG / 6.0 * 100 = xG * 16.67
+      const xGScore = Math.min(100, parseFloat(xGValue) * 16.67);
 
-      const territoryIntensity = Math.abs(territory - 50) * 2;
+      // Normalize territory: Use direct value (0-100) instead of abs difference
+      // This prevents neutral territory from inflating the score
+      const territoryNorm = territory;
 
-      // Weights: Accel (45%), xG (35%), Territory (20%) + Flat Bonus
-      // +10 Base Bonus (Increased from 5 to make it easier to reach)
-      const rawIndex = (shotAccel * 0.45) + (xGScore * 0.35) + (territoryIntensity * 0.20) + 10;
+      // Base calculation with EQUAL weights for all metrics
+      // Weights: xG (33.33%), Shot Accel (33.33%), Territory (33.33%)
+      const baseIndex = (shotAccel * 0.3333) + (xGScore * 0.3333) + (territoryNorm * 0.3333);
+
+      // Consistency Factor: Penalize if only one or two indicators are high
+      // This prevents a single high indicator from dominating the result
+      const indicators = [shotAccel, xGScore, territoryNorm];
+      const highCount = indicators.filter(v => v > 60).length;
+      const consistencyFactor = highCount === 1 ? 0.7 : highCount === 2 ? 0.85 : 1.0;
+
+      // Apply consistency factor and cap
+      const rawIndex = baseIndex * consistencyFactor;
       const pressureIndex = Math.min(99, Math.floor(rawIndex));
 
       // E. Edge (Value) calculation
-      // Threshold 50 (Lowered from 60). Multiplier 1.0 (Increased from 0.8).
-      let rawEdge = Math.max(0, (pressureIndex - 50) * 1.0);
+      // Threshold 60 (Restored). Multiplier 0.8 (Restored from 1.0).
+      let rawEdge = Math.max(0, (pressureIndex - 60) * 0.80);
 
       // TIME DECAY (Min 80+ adjustment)
       // Value drops as time runs out, unless intensity is extreme.
@@ -369,8 +470,8 @@ const MatchCard = ({ match }: { match: Match }) => {
     const pressureIndex = Math.min(99, Math.floor(rawIndex));
 
     // 6. Value Edge Calculation (Fallback)
-    // Threshold 50, Multiplier 0.8
-    const rawEdge = Math.max(0, (pressureIndex - 50) * 0.8);
+    // Threshold 60, Multiplier 0.5
+    const rawEdge = Math.max(0, (pressureIndex - 60) * 0.5);
     const edge = Math.floor(rawEdge);
 
     // 7. Recommended Stake
@@ -756,7 +857,7 @@ export default function Home() {
     return () => clearInterval(interval);
   }, []);
 
-  const lateMatches = apiMatches.filter(m => parseMatchTime(m.current_minute) >= 65);
+  const lateMatches = apiMatches.filter(m => parseMatchTime(m.current_minute) >= 60);
   // regularMatches not needed if we just show Everything or Late
 
   if (isLoading && apiMatches.length === 0) {
@@ -786,20 +887,12 @@ export default function Home() {
               className="w-full appearance-none bg-gray-800 text-xs font-bold text-white uppercase tracking-wider py-2 pl-3 pr-8 rounded border border-white/10 hover:border-emerald-500/50 focus:outline-none focus:border-emerald-500 transition-colors cursor-pointer"
             >
               <option value="ALL">All Matches</option>
-              <option value="LATE">Final Stretch (65'+)</option>
+              <option value="LATE">Final Stretch (60'+)</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-emerald-500">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
             </div>
           </div>
-        </div>
-
-        {/* Center: Logo */}
-        <div className="flex items-center gap-2 absolute left-1/2 transform -translate-x-1/2">
-          <div className="h-2 w-2 bg-emerald-500 rounded-full shadow-[0_0_10px_#10b981]"></div>
-          <h1 className="text-xl font-bold tracking-tight text-white">
-            BETLY<span className="text-emerald-500">.LIVE</span>
-          </h1>
         </div>
 
         {/* Right: Spacer to balance layout */}
@@ -824,7 +917,7 @@ export default function Home() {
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-3 w-3 bg-orange-500"></span>
                     </span>
-                    <h2 className="text-lg font-bold text-white tracking-widest uppercase">Final Stretch (65'+)</h2>
+                    <h2 className="text-lg font-bold text-white tracking-widest uppercase">Final Stretch (60'+)</h2>
                   </div>
                   <div className="flex flex-col space-y-6">
                     {lateMatches.map(match => (
