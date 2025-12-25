@@ -408,10 +408,9 @@ const MatchCard = ({ match }: { match: Match }) => {
       const shotAccel = Math.min(99, Math.floor(weightedShotsPerMin * 200));
 
       // D. Pressure Index (Combined) -> Weighted calculation with consistency check
-      // Normalize xG to a 0-100 scale. 
-      // Target: ~6.0 projected xG (aggressive 90min pace) -> 100 Index
-      // Formula: xG / 6.0 * 100 = xG * 16.67
-      const xGScore = Math.min(100, parseFloat(xGValue) * 16.67);
+      // Normalize xG to a 0-100 scale.
+      // Target: ~5.0 projected xG -> 100 Index (Aligned with visual bar which uses * 20)
+      const xGScore = Math.min(100, parseFloat(xGValue) * 20);
 
       // Normalize territory: Use direct value (0-100) instead of abs difference
       // This prevents neutral territory from inflating the score
@@ -424,8 +423,11 @@ const MatchCard = ({ match }: { match: Match }) => {
       // Consistency Factor: Penalize if only one or two indicators are high
       // This prevents a single high indicator from dominating the result
       const indicators = [shotAccel, xGScore, territoryNorm];
-      const highCount = indicators.filter(v => v > 60).length;
-      const consistencyFactor = highCount === 1 ? 0.7 : highCount === 2 ? 0.85 : 1.0;
+      // Changed > 60 to >= 50 to be less punitive usually.
+      const highCount = indicators.filter(v => v >= 50).length;
+
+      // Softened penalties: 0.8 -> 0.9 -> 1.0 (was 0.7 -> 0.85 -> 1.0)
+      const consistencyFactor = highCount === 1 ? 0.8 : highCount === 2 ? 0.9 : 1.0;
 
       // Apply consistency factor and cap
       const rawIndex = baseIndex * consistencyFactor;
@@ -920,8 +922,8 @@ export default function Home() {
                     <h2 className="text-lg font-bold text-white tracking-widest uppercase">Final Stretch (60'+)</h2>
                   </div>
                   <div className="flex flex-col space-y-6">
-                    {lateMatches.map(match => (
-                      <div key={match.id} className="flex flex-col md:flex-row gap-2 items-start justify-center">
+                    {lateMatches.map((match, index) => (
+                      <div id={`match-pos-${index + 1}`} key={match.id} className={`match-container match-pos-${index + 1} flex flex-col md:flex-row gap-2 items-start justify-center`}>
                         <div className="w-full max-w-md flex-none">
                           <MatchCard match={match} />
                         </div>
@@ -951,8 +953,8 @@ export default function Home() {
               </div>
 
               <div className="flex flex-col space-y-6">
-                {apiMatches.map(match => (
-                  <div key={match.id} className="flex flex-col md:flex-row gap-2 items-start justify-center">
+                {apiMatches.map((match, index) => (
+                  <div id={`match-pos-${index + 1}`} key={match.id} className={`match-container match-pos-${index + 1} flex flex-col md:flex-row gap-2 items-start justify-center`}>
                     <div className="w-full max-w-md flex-none">
                       <MatchCard match={match} />
                     </div>
