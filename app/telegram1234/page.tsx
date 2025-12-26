@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 // --- Interfaces ---
 interface Tournament {
@@ -556,6 +557,18 @@ const OddsDisplay = ({ markets, match, filterHighOdds }: { markets: Market[], ma
 
 // --- Component: MatchCard ---
 const MatchCard = ({ match, filterHighOdds }: { match: Match, filterHighOdds?: boolean }) => {
+    const router = useRouter();
+
+    const handleStrategyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const strategy = e.target.value;
+        if (strategy) {
+            const leagueName = match.league_header?.name || match.tournament.name || "league";
+            const leagueSlug = leagueName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || "league";
+            // Uses id2 if available, otherwise fallback to id (but API should provide id2)
+            const matchIdToUse = (match as any).id2 || match.id;
+            router.push(`/marketing/${leagueSlug}/${matchIdToUse}/${strategy}`);
+        }
+    };
     return (
         <div className="group relative w-full mb-6 max-w-2xl mx-auto">
             {/* Glow Effect */}
@@ -598,6 +611,27 @@ const MatchCard = ({ match, filterHighOdds }: { match: Match, filterHighOdds?: b
                     <div className="flex flex-col items-center gap-2 w-1/3">
                         <TeamLogo name={match.competitors.away.name} className="w-12 h-12" defaultColor="#ef4444" />
                         <span className="text-xs font-bold text-gray-200 text-center">{match.competitors.away.name}</span>
+                    </div>
+                </div>
+
+                {/* MARKETING STRATEGY SELECTOR */}
+                <div className="px-4 py-3 bg-[#080808] border-t border-white/5">
+                    <div className="relative">
+                        <select
+                            onChange={handleStrategyChange}
+                            className="w-full appearance-none bg-[#111] text-xs font-bold text-gray-300 uppercase tracking-widest py-3 pl-4 pr-10 rounded-lg border border-white/10 hover:border-emerald-500/50 hover:text-white hover:bg-[#161616] focus:outline-none focus:border-emerald-500 transition-all cursor-pointer shadow-lg"
+                            defaultValue=""
+                        >
+                            <option value="" disabled>🎯 Seleccionar Estrategia IA</option>
+                            <option value="safe">🛡️ Apuesta Segura (Alta Probabilidad)</option>
+                            <option value="medium">⚖️ Apuesta Media (Valor Óptimo)</option>
+                            <option value="risky">🚀 Apuesta Arriesgada (High Yield)</option>
+                        </select>
+                        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-emerald-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                            </svg>
+                        </div>
                     </div>
                 </div>
 

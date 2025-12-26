@@ -372,11 +372,37 @@ def get_fast_odds():
 @app.get("/api/oriol-odds")
 def get_oriol_odds():
     with oriol_lock:
-        # We can also merge stats here if desired, but user didn't explicitly ask for it.
-        # Let's simple return the data for now.
+        # Inject sequential ID2 PER LEAGUE for URL routing (1, 2, 3... for EACH league)
+        matches_with_id = []
+        league_counters = {}
+
+        for match in oriol_cache:
+            m_copy = match.copy()
+            
+            # Determine League Key (Consistency is key)
+            # Use league_header name if available, else tournament name
+            league_name = "unknown"
+            if m_copy.get('league_header') and m_copy['league_header'].get('name'):
+                 league_name = m_copy['league_header']['name']
+            elif m_copy.get('tournament') and m_copy['tournament'].get('name'):
+                 league_name = m_copy['tournament']['name']
+            
+            # Normalize for key usage (optional but safer)
+            league_key = league_name.strip().lower() # Simple normalization
+
+            # Initialize counter if new league
+            if league_key not in league_counters:
+                league_counters[league_key] = 1
+            
+            # Assign ID and increment
+            m_copy['id2'] = league_counters[league_key]
+            league_counters[league_key] += 1
+            
+            matches_with_id.append(m_copy)
+
         return {
-            "matches": oriol_cache,
-            "count": len(oriol_cache),
+            "matches": matches_with_id,
+            "count": len(matches_with_id),
             "status": "scraping" if is_scraping_oriol and not oriol_cache else "ready"
         }
 
