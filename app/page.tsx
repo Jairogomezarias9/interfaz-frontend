@@ -77,6 +77,7 @@ interface Stats365 {
   home: TeamStats365;
   away: TeamStats365;
   is_simulated?: boolean;
+  simulated_keys?: string[];
 }
 
 // --- Components ---
@@ -179,18 +180,29 @@ const parseMatchTime = (timeStr?: string): number => {
 const StatsPanel = ({ stats }: { stats: Stats365 }) => {
   if (!stats || (!stats.home && !stats.away)) return null;
 
-  const renderStatRow = (label: string, homeVal: string = '0', awayVal: string = '0', highlightWinner = false) => {
+  const isSimulated = (key: string) => {
+    // Check if this key is in the simulated list
+    if (stats.is_simulated) return true; // All simulated
+    if (stats.simulated_keys && stats.simulated_keys.includes(key)) return true;
+    return false;
+  };
+
+  const renderStatRow = (label: string, homeVal: string = '0', awayVal: string = '0', highlightWinner = false, key?: string) => {
     const h = parseInt(homeVal) || 0;
     const a = parseInt(awayVal) || 0;
+
+    // Check Red styling for simulated
+    const simClass = key && isSimulated(key) ? 'text-red-500 font-bold' : '';
+
     // Simple bolding for higher value
     const homeClass = highlightWinner && h > a ? 'text-emerald-400 font-bold' : 'text-gray-300';
     const awayClass = highlightWinner && a > h ? 'text-emerald-400 font-bold' : 'text-gray-300';
 
     return (
       <div className="flex justify-between items-center py-1 border-b border-white/5 last:border-0 leading-none">
-        <span className={`text-[10px] w-6 text-center ${homeClass}`}>{homeVal}</span>
-        <span className="text-[8px] text-gray-500 uppercase font-bold tracking-wider text-center flex-1">{label}</span>
-        <span className={`text-[10px] w-6 text-center ${awayClass}`}>{awayVal}</span>
+        <span className={`text-[10px] w-6 text-center ${simClass || homeClass}`}>{homeVal}</span>
+        <span className={`text-[8px] text-gray-500 uppercase font-bold tracking-wider text-center flex-1 ${simClass ? 'text-red-500/70' : ''}`}>{label}</span>
+        <span className={`text-[10px] w-6 text-center ${simClass || awayClass}`}>{awayVal}</span>
       </div>
     );
   };
@@ -204,8 +216,12 @@ const StatsPanel = ({ stats }: { stats: Stats365 }) => {
         <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Live Stats</span>
         <div className="flex gap-1 items-center">
           {stats.is_simulated ? (
-            <span className="text-[8px] text-orange-400 font-bold flex items-center gap-0.5" title="Simulated Data">
+            <span className="text-[8px] text-orange-400 font-bold flex items-center gap-0.5" title="Full Simulation">
               📌 SIM
+            </span>
+          ) : stats.simulated_keys && stats.simulated_keys.length > 0 ? (
+            <span className="text-[8px] text-red-500 font-bold flex items-center gap-0.5" title="Partial Simulation">
+              ⚠ PARTIAL
             </span>
           ) : (
             <>
@@ -217,16 +233,18 @@ const StatsPanel = ({ stats }: { stats: Stats365 }) => {
       </div>
 
       <div className="flex flex-col gap-0.5">
-        {renderStatRow("Possession", stats.home.possession || '-', stats.away.possession || '-')}
-        {renderStatRow("Corners", stats.home.corners || '0', stats.away.corners || '0', true)}
-        {renderStatRow("Total Shots", stats.home.total_shots, stats.away.total_shots, true)}
-        {renderStatRow("On Target", stats.home.shots_on_goal, stats.away.shots_on_goal, true)}
-        {renderStatRow("Off Target", stats.home.shots_off_goal, stats.away.shots_off_goal)}
-        {renderStatRow("Blocked", stats.home.blocked_shots, stats.away.blocked_shots)}
-        {renderStatRow("Passes", stats.home.passes_completed, stats.away.passes_completed, true)}
+        {renderStatRow("Possession", stats.home.possession || '-', stats.away.possession || '-', false, 'possession')}
+        {renderStatRow("Corners", stats.home.corners || '0', stats.away.corners || '0', true, 'corners')}
+        {renderStatRow("Total Shots", stats.home.total_shots, stats.away.total_shots, true, 'total_shots')}
+        {renderStatRow("On Target", stats.home.shots_on_goal, stats.away.shots_on_goal, true, 'shots_on_goal')}
+        {renderStatRow("Off Target", stats.home.shots_off_goal, stats.away.shots_off_goal, false, 'shots_off_goal')}
+        {renderStatRow("Blocked", stats.home.blocked_shots, stats.away.blocked_shots, false, 'blocked_shots')}
+        {renderStatRow("Passes", stats.home.passes_completed, stats.away.passes_completed, true, 'passes_completed')}
         {renderStatRow("Cards (Y/R)",
           `${stats.home.yellow_cards || 0}/${stats.home.red_cards || 0}`,
-          `${stats.away.yellow_cards || 0}/${stats.away.red_cards || 0}`
+          `${stats.away.yellow_cards || 0}/${stats.away.red_cards || 0}`,
+          false,
+          'cards'
         )}
       </div>
     </div>
@@ -768,28 +786,26 @@ export default function Home() {
           const awayGoals = parseInt(m.away_score || '0');
           const minute = parseMatchTime(m.current_minute);
 
-          // Check Inconsistency: Goals > 0 BUT Shots < Goals (Impossible)
-          // Or suspiciously low shots deep in game (e.g. min 50, 0 shots)
-          const hShots = parseInt(m.stats_365.home.total_shots || '0');
-          const aShots = parseInt(m.stats_365.away.total_shots || '0');
+          // Check if Shots are missing or inconsistent
+          // 1. Explicitly missing (undefined or empty)
+          // 2. Inconsistent (Goals > Shots)
+          // 3. Suspiciously zero deep in game (e.g. min 45+ with 0 shots total)
+          const hShotsRaw = m.stats_365.home.total_shots;
+          const aShotsRaw = m.stats_365.away.total_shots;
 
-          // "No, al revés": User implies Equal is VALID. So only simulate if STRICTLY LESS.
-          const isBadStats = (homeGoals > 0 && hShots < homeGoals) ||
-            (awayGoals > 0 && aShots < awayGoals) ||
-            (minute > 40 && (hShots + aShots) === 0);
+          const hShots = parseInt(hShotsRaw || '0');
+          const aShots = parseInt(aShotsRaw || '0');
 
-          if (isBadStats) {
-            // GENERATE FAKE STATS
-            // Base: roughly 1 shot every 6-8 mins is plausible average?
-            // Let's be conservative: 1 shot every 9 mins
+          const missingShots = !hShotsRaw || !aShotsRaw;
+          const badShots = (homeGoals > hShots) || (awayGoals > aShots);
+          const zeroShotsLate = (minute > 40 && (hShots + aShots) === 0);
+
+          if (missingShots || badShots || zeroShotsLate) {
+            // GENERATE FAKE SHOTS ONLY
             const baseShotsHome = Math.floor(minute / 9) + homeGoals;
             const baseShotsAway = Math.floor(minute / 9) + awayGoals;
 
-            // Corners: approx 1 every 10-12 mins per team avg?
-            const baseCornHome = Math.floor(minute / 12) + (homeGoals > awayGoals ? 1 : 0);
-            const baseCornAway = Math.floor(minute / 12) + (awayGoals > homeGoals ? 1 : 0);
-
-            // Add randomness
+            // Randomize
             const rndH = Math.floor(Math.random() * 3);
             const rndA = Math.floor(Math.random() * 3);
 
@@ -800,27 +816,32 @@ export default function Home() {
             const onTargetH = Math.max(homeGoals, Math.floor(finalH * 0.4));
             const onTargetA = Math.max(awayGoals, Math.floor(finalA * 0.4));
 
+            // Blocked/Off
+            const blockedH = Math.floor(Math.random() * 2);
+            const blockedA = Math.floor(Math.random() * 2);
+            const offH = Math.max(0, finalH - onTargetH - blockedH);
+            const offA = Math.max(0, finalA - onTargetA - blockedA);
+
+            const simKeys = ['total_shots', 'shots_on_goal', 'shots_off_goal', 'blocked_shots'];
+
             return {
               ...m,
               stats_365: {
-                is_simulated: true,
+                ...m.stats_365,
+                simulated_keys: simKeys,
                 home: {
-                  ...m.stats_365!.home,
+                  ...m.stats_365.home,
                   total_shots: finalH.toString(),
                   shots_on_goal: onTargetH.toString(),
-                  shots_off_goal: (finalH - onTargetH).toString(),
-                  passes_completed: (minute * 3 + Math.floor(Math.random() * 50)).toString(),
-                  possession: '50%',
-                  corners: (baseCornHome + Math.floor(Math.random() * 2)).toString()
+                  shots_off_goal: offH.toString(),
+                  blocked_shots: blockedH.toString(),
                 },
                 away: {
-                  ...m.stats_365!.away,
+                  ...m.stats_365.away,
                   total_shots: finalA.toString(),
                   shots_on_goal: onTargetA.toString(),
-                  shots_off_goal: (finalA - onTargetA).toString(),
-                  passes_completed: (minute * 3 + Math.floor(Math.random() * 50)).toString(),
-                  possession: '50%',
-                  corners: (baseCornAway + Math.floor(Math.random() * 2)).toString()
+                  shots_off_goal: offA.toString(),
+                  blocked_shots: blockedA.toString(),
                 }
               }
             };
@@ -894,6 +915,16 @@ export default function Home() {
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-emerald-500">
               <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
             </div>
+          </div>
+        </div>
+
+        {/* Center: Title */}
+        <div className="absolute left-1/2 transform -translate-x-1/2 flex items-center gap-2">
+          <div className="relative">
+            <h1 className="text-2xl font-black tracking-tighter bg-gradient-to-r from-emerald-400 via-emerald-300 to-emerald-500 bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(16,185,129,0.3)]">
+              GRIZZLY ALGO
+            </h1>
+            <div className="absolute -bottom-0.5 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent"></div>
           </div>
         </div>
 

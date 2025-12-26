@@ -93,15 +93,19 @@ def scrape_365scores():
                             if side:
                                 key = None
                                 # Map metrics
-                                if name == "Total Remates": key = "total_shots"
-                                elif name == "Remates a Puerta": key = "shots_on_goal"
-                                elif name == "Remates Fuera": key = "shots_off_goal"
-                                elif name == "Remates bloqueados": key = "blocked_shots"
-                                elif name == "Pases completados": key = "passes_completed"
-                                elif name == "Tarjetas Amarillas": key = "yellow_cards"
-                                elif name == "Tarjetas Rojas": key = "red_cards"
-                                elif name == "Posesión": key = "possession"
-                                elif "esquina" in name.lower() or "corner" in name.lower(): key = "corners"
+                                name_lower = name.lower()
+                                
+                                key = None
+                                # Map metrics (Fuzzy match / Hybrid English-Spanish)
+                                if "total remates" in name_lower or "total shots" in name_lower or "remates" == name_lower: key = "total_shots"
+                                elif "puerta" in name_lower or "on goal" in name_lower or "on target" in name_lower: key = "shots_on_goal"
+                                elif "fuera" in name_lower or "off goal" in name_lower or "off target" in name_lower: key = "shots_off_goal"
+                                elif "bloqueados" in name_lower or "blocked" in name_lower: key = "blocked_shots"
+                                elif "pases" in name_lower or "passes" in name_lower: key = "passes_completed"
+                                elif "amarillas" in name_lower or "yellow" in name_lower: key = "yellow_cards"
+                                elif "rojas" in name_lower or "red" in name_lower: key = "red_cards"
+                                elif "posesión" in name_lower or "possession" in name_lower: key = "possession"
+                                elif "esquina" in name_lower or "corner" in name_lower: key = "corners"
                                 
                                 if key:
                                     match_data["stats"][side][key] = val

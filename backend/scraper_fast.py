@@ -226,6 +226,7 @@ def scrape_tonybet_fast():
                         
                     href = link_el.get('href')
                     if 'football' not in href and 'soccer' not in href: continue
+                    if 'american-football' in href: continue # Explicitly exclude NFL/American Football
                     
                     # Extract Match ID from HREF for JSON lookup FIRST (before duplicate check)
                     # URL samples: /live/football/1008007-laliga/7802786-osasuna-alaves

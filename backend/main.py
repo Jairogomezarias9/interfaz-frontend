@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from scraper import scrape_tonybet
 from prematch_scraper import scrape_tonybet_prematch
 from scraper_fast import scrape_tonybet_fast
+from scrapper_oriol import scrape_tonybet_oriol # [NEW IMPORT]
 from scraper_365scores import scrape_365scores
 import uvicorn
 import threading
@@ -34,7 +35,7 @@ app.mount("/debug", StaticFiles(directory="."), name="debug")
 
 @app.get("/")
 def read_root():
-    return {"message": "Betly API is running", "endpoints": ["/api/odds", "/api/prematch-odds", "/api/fast-odds"]}
+    return {"message": "Betly API is running", "endpoints": ["/api/odds", "/api/prematch-odds", "/api/fast-odds", "/api/oriol-odds"]}
 
 @app.get("/favicon.ico")
 def favicon():
@@ -54,6 +55,11 @@ is_scraping_prematch = False
 fast_cache = []
 fast_lock = threading.Lock()
 is_scraping_fast = False
+
+# [NEW] Oriol Cache
+oriol_cache = []
+oriol_lock = threading.Lock()
+is_scraping_oriol = False
 
 # --- STATS UNIFIER ---
 STATS_FILE = "365scores_live.json"
@@ -223,6 +229,38 @@ def background_scraper_fast():
         print("[Background Fast] Waiting 2 minutes before next update...")
         time.sleep(120)
 
+# [NEW] Background Scraper Oriol
+def background_scraper_oriol():
+    global oriol_cache, is_scraping_oriol
+    while True:
+        try:
+            print("\n[Background Oriol] Starting new scrape cycle (FULL ODDS)...")
+            is_scraping_oriol = True
+            start_time = time.time()
+            
+            # Run the scraper
+            new_data = scrape_tonybet_oriol()
+            
+            # Update cache if we got data
+            if new_data:
+                with oriol_lock:
+                    oriol_cache = new_data
+                print(f"[Background Oriol] Cache updated with {len(new_data)} matches.")
+            else:
+                print("[Background Oriol] No data found in this cycle.")
+                
+            duration = time.time() - start_time
+            print(f"[Background Oriol] Cycle finished in {duration:.2f} seconds.")
+            
+        except Exception as e:
+            print(f"[Background Oriol] Error in scraper loop: {e}")
+        finally:
+            is_scraping_oriol = False
+            
+        # Wait 2 minutes before next update
+        print("[Background Oriol] Waiting 8000 seconds before next update...")
+        time.sleep(8000)
+
 def background_scraper_365():
     global is_scraping_365
     while True:
@@ -252,10 +290,11 @@ def background_scraper_365():
 @app.on_event("startup")
 def startup_event():
     # Read configuration from environment variable
-    # Options: "LIVE", "PREMATCH", "FAST", "BOTH" (Live+Prematch), "ALL"
-    scraper_mode = os.getenv("SCRAPER_MODE", "BOTH").upper()
+    # Options: "LIVE", "PREMATCH", "FAST", "BOTH" (Live+Prematch), "ALL", "ORIOL", "FAST_ORIOL"
+    # User requested: scraper_365, scraper_fast, scrapper_oriol -> FAST_ORIOL
+    scraper_mode = os.getenv("SCRAPER_MODE", "FAST_ORIOL").upper().strip()
     print(f"Starting server with SCRAPER_MODE={scraper_mode}")
-    print(f"Starting server with SCRAPER_MODE={scraper_mode}")
+    print(f"DEBUG MODE VALUE: {repr(scraper_mode)}")
 
     # DEBUG: Print registered routes
     print("--- Registered Routes ---")
@@ -275,7 +314,7 @@ def startup_event():
         thread_prematch.start()
         print("Prematch scraper background thread started.")
 
-    if scraper_mode in ["FAST", "ALL"]:
+    if scraper_mode in ["FAST", "ALL", "FAST_ORIOL"]:
         # Start the fast scraper in a separate background thread
         thread_fast = threading.Thread(target=background_scraper_fast, daemon=True)
         thread_fast.start()
@@ -286,6 +325,12 @@ def startup_event():
         thread_365 = threading.Thread(target=background_scraper_365, daemon=True)
         thread_365.start()
         print("365Scores scraper background thread started.")
+    
+    # [NEW] STart Oriol Scraper if mode is ALL or ORIOL or FAST_ORIOL
+    if scraper_mode in ["ALL", "ORIOL", "FAST_ORIOL"]:
+        thread_oriol = threading.Thread(target=background_scraper_oriol, daemon=True)
+        thread_oriol.start()
+        print("Oriol scraper (Full Odds) background thread started.")
 
 @app.get("/api/odds")
 def get_odds():
@@ -321,6 +366,18 @@ def get_fast_odds():
             "matches": matches_merged,
             "count": len(matches_merged),
             "status": "scraping" if is_scraping_fast and not fast_cache else "ready"
+        }
+
+# [NEW] Endpoint for Oriol Odds
+@app.get("/api/oriol-odds")
+def get_oriol_odds():
+    with oriol_lock:
+        # We can also merge stats here if desired, but user didn't explicitly ask for it.
+        # Let's simple return the data for now.
+        return {
+            "matches": oriol_cache,
+            "count": len(oriol_cache),
+            "status": "scraping" if is_scraping_oriol and not oriol_cache else "ready"
         }
 
 if __name__ == "__main__":

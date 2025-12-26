@@ -8,7 +8,10 @@ const util = require('util');
 const streamPipeline = util.promisify(pipeline);
 
 // --- Configuration ---
-const API_URL = "http://185.254.96.194:8001/api/fast-odds"; // Or local if needed
+const API_URLS = [
+    "http://185.254.96.194:8001/api/fast-odds",  // Live Fast Scraper
+    "http://185.254.96.194:8001/api/oriol-odds"  // Upcoming/Full Odds Scraper
+];
 // Target: ../public/logos relative to this script
 const TARGET_DIR = path.join(__dirname, '../public/logos');
 
@@ -269,7 +272,9 @@ const searchTeamOnline = async (teamName, preferFlag = false) => {
 };
 
 // --- Main ---
-(async () => {
+// --- Main Loop ---
+const runDownloader = async () => {
+    console.log("[DEBUG] Starting downloader cycle...");
     console.log("[DEBUG] TARGET_DIR resolved to:", path.resolve(TARGET_DIR));
 
     // Ensure directory exists
@@ -282,7 +287,7 @@ const searchTeamOnline = async (teamName, preferFlag = false) => {
         console.error("Could not create target dir:", e);
     }
 
-    // CLI Test Mode
+    // CLI Test Mode (Single Run)
     if (process.argv[2]) {
         const testTeam = process.argv[2];
         console.log(`[TEST] Testing specific team: "${testTeam}"`);
@@ -302,21 +307,36 @@ const searchTeamOnline = async (teamName, preferFlag = false) => {
                 console.log("[TEST] debug: All DB entries with 'Valencia':", valenciaMatches.map(c => c.Name));
             }
         }
-        return;
+        // If testing a specific team, do not loop.
+        process.exit(0);
     }
 
-    console.log("Fetching current matches...");
+    console.log(`[${new Date().toISOString()}] Fetching current matches from ALL sources...`);
+
+    const teams = new Set();
+
     try {
-        const data = await customFetch(API_URL);
-        if (!data.matches) throw new Error("No matches found");
+        // Sequentially fetch from all configured APIs (fast + oriol)
+        for (const url of API_URLS) {
+            try {
+                console.log(`[DEBUG] Fetching from: ${url}`);
+                const data = await customFetch(url);
+                if (data.matches && Array.isArray(data.matches)) {
+                    data.matches.forEach(m => {
+                        // Handle potential different structures if necessary, but both seem to use m.competitors
+                        if (m.competitors && m.competitors.home && m.competitors.home.name) teams.add(m.competitors.home.name);
+                        if (m.competitors && m.competitors.away && m.competitors.away.name) teams.add(m.competitors.away.name);
+                        // Fallback for flat structure if any
+                        if (m.home_team) teams.add(m.home_team);
+                        if (m.away_team) teams.add(m.away_team);
+                    });
+                }
+            } catch (err) {
+                console.warn(`[WARN] Failed to fetch from ${url}: ${err.message}`);
+            }
+        }
 
-        const teams = new Set();
-        data.matches.forEach(m => {
-            if (m.competitors && m.competitors.home && m.competitors.home.name) teams.add(m.competitors.home.name);
-            if (m.competitors && m.competitors.away && m.competitors.away.name) teams.add(m.competitors.away.name);
-        });
-
-        console.log(`Found ${teams.size} unique teams currently playing.`);
+        console.log(`Found ${teams.size} unique teams currently playing/upcoming.`);
 
         for (const team of teams) {
             // Use NORMALIZED/CLEAN NAME for saving the file!
@@ -335,7 +355,7 @@ const searchTeamOnline = async (teamName, preferFlag = false) => {
             // Check if it's a known country first (using clean name)
             if (spanishToEnglish[normalizedName] || spanishToEnglish[team]) {
                 isCountry = true;
-                console.log(`[INFO] "${team}" is identified as a country. Prioritizing online search.`);
+                // console.log(`[INFO] "${team}" is identified as a country. Prioritizing online search.`);
             }
 
             // 1. If Country, try Online First
@@ -357,9 +377,11 @@ const searchTeamOnline = async (teamName, preferFlag = false) => {
             if (logoUrl) {
                 try {
                     await downloadFile(logoUrl, safeName);
+                    /*
                     if (isCountry || !findLogoLocal(team)) {
                         console.log(`[SUCCESS] Downloaded via Online API for: ${team}`);
                     }
+                     */
                 } catch (e) {
                     console.error(`Failed to download logo for ${team}:`, e.message);
                 }
@@ -372,4 +394,20 @@ const searchTeamOnline = async (teamName, preferFlag = false) => {
     } catch (error) {
         console.error("Error in main loop:", error);
     }
-})();
+};
+
+const main = async () => {
+    // Run immediately
+    await runDownloader();
+
+    // Then loop every 10 minutes
+    const INTERVAL = 10 * 60 * 1000; // 10 minutes
+    console.log(`[SYSTEM] Script will now run every ${INTERVAL / 60000} minutes.`);
+
+    setInterval(async () => {
+        console.log("\n[SYSTEM] Triggering scheduled run...");
+        await runDownloader();
+    }, INTERVAL);
+};
+
+main();
